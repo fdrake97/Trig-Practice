@@ -34,6 +34,7 @@
             border: none;
             cursor: pointer;
             border-radius: 5px;
+            margin-top: 10px;
         }
 
         button:hover {
@@ -62,14 +63,14 @@
             font-weight: bold;
         }
 
-        #timer, #avgTime {
+        #avgTime {
             margin-top: 20px;
         }
     </style>
 </head>
 <body>
     <div class="info-container">
-        <h1>Welcome to Trig Practice!</h1>
+        <h1>Instructions</h1>
         <p>
             To input non-integer answers, use the following format:
             <br>
@@ -101,11 +102,11 @@
             <input type="text" id="userAnswer" placeholder="Your answer">
         </form>
         <p id="result"></p>
-        <p id="timer" style="display: none;">Time: <span id="time">0.0</span> seconds</p>
-        <p id="avgTime">Average Time: <span id="avgTimeValue">0.0</span> seconds</p>
+        <p id="avgTime">Average Time Per Question: <span id="avgTimeValue">0.0</span> seconds</p>
         <p>Current Streak: <span id="currentStreak">0</span></p>
         <p>Highest Streak: <span id="highestStreak">0</span></p>
         <button onclick="resetCounters()">Reset</button>
+        <button onclick="showInstructions()">Instructions</button>
     </div>
 
     <script>
@@ -142,14 +143,6 @@
 
             // Record the time when the question is displayed
             lastQuestionTime = new Date().getTime();
-
-            // Start the timer only when the user inputs their first answer
-            if (!timerActive) {
-                timerActive = true;
-                startTime = new Date().getTime();
-                document.getElementById("timer").style.display = "block";
-                updateTimer();
-            }
         }
 
         // Function to get the correct answer for a specific question
@@ -214,17 +207,6 @@
             return answerOptions.includes(answer);
         }
 
-        // Function to update the timer display
-        function updateTimer() {
-            if (timerActive) {
-                var currentTime = new Date().getTime();
-                var elapsedTime = (currentTime - startTime) / 1000; // in seconds with 1 decimal place
-                document.getElementById("time").innerText = elapsedTime.toFixed(1);
-
-                setTimeout(updateTimer, 100); // update every 0.1 second
-            }
-        }
-
         // Function to reset all counters and timers
         function resetCounters() {
             currentStreak = 0;
@@ -237,11 +219,15 @@
 
             document.getElementById("currentStreak").innerText = currentStreak;
             document.getElementById("highestStreak").innerText = highestStreak;
-            document.getElementById("timer").style.display = "none";
-            document.getElementById("time").innerText = "0.0";
             document.getElementById("avgTimeValue").innerText = "0.0";
 
             generateQuestion(); // Ask a new question after reset
+        }
+
+        // Function to show instructions (take user back to the intro page)
+        function showInstructions() {
+            document.getElementById('app-container').style.display = 'none';
+            document.querySelector('.info-container').style.display = 'block';
         }
     </script>
 </body>
