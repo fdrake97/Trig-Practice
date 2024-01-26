@@ -99,7 +99,7 @@
         <h1>Trig Practice</h1>
         <div id="question-container"></div>
         <form onsubmit="checkAnswer(); return false;">
-            <input type="text" id="userAnswer" placeholder="Your answer">
+            <input type="text" id="userAnswer" placeholder="Your answer" autocomplete="off">
         </form>
         <p id="result"></p>
         <p id="avgTime">Average Time Per Question: <span id="avgTimeValue">0.0</span> seconds</p>
@@ -107,6 +107,9 @@
         <p>Highest Streak: <span id="highestStreak">0</span></p>
         <button onclick="resetCounters()">Reset</button>
         <button onclick="showInstructions()">Instructions</button>
+        <div id="svg-container">
+            <img src="half_unit_circle_black.svg" alt="Half Unit Circle" />
+        </div>
     </div>
 
     <script>
