@@ -108,8 +108,9 @@
         <button onclick="resetCounters()">Reset</button>
         <button onclick="showInstructions()">Instructions</button>
         <div id="svg-container">
-            <img src="half_unit_circle_black.svg" alt="Half Unit Circle" />
+            <img id="vectorImage" src="half_unit_circle_black.svg" alt="Half Unit Circle" />
         </div>
+        <button id="toggleButton" onclick="toggleCoordinates()">Hide Coordinates</button>
     </div>
 
     <script>
@@ -232,6 +233,21 @@
             document.getElementById('app-container').style.display = 'none';
             document.querySelector('.info-container').style.display = 'block';
         }
+
+        function toggleCoordinates() {
+            var image = document.getElementById('vectorImage');
+            var toggleButton = document.getElementById('toggleButton');
+
+            // Toggle between two SVGs
+            if (image.src.includes('half_unit_circle_black.svg')) {
+                image.src = 'half_unit_circle_black_no_coords.svg';
+                toggleButton.textContent = 'Show Coordinates';
+            } else {
+                image.src = 'half_unit_circle_black.svg';
+                toggleButton.textContent = 'Hide Coordinates';
+            }
+        }
+        
     </script>
 </body>
 </html>
