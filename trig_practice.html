@@ -299,23 +299,27 @@
         function toggleCoordinates() {
             var image = document.getElementById('vectorImage');
             var toggleButton = document.getElementById('toggleButton');
+            var toggle180to360 = document.getElementById('toggle180to360');
 
-            if (toggleButton.classList.contains('active')) {
+            if (toggle180to360.classList.contains('active')) {
+                console.log("blah3")
                 // Toggle between two SVGs
-                if (image.src.includes('full_unit_circle_black.svg')) {
-                    image.src = 'full_unit_circle_black_no_coords.svg';
-                    toggleButton.textContent = 'Show Coordinates';
-                } else {
-                    image.src = 'full_unit_circle_black.svg';
-                    toggleButton.textContent = 'Hide Coordinates';
-                }
-            }
-            else{
                 if (image.src.includes('half_unit_circle_black.svg')) {
                     image.src = 'half_unit_circle_black_no_coords.svg';
                     toggleButton.textContent = 'Show Coordinates';
                 } else {
                     image.src = 'half_unit_circle_black.svg';
+                    toggleButton.textContent = 'Hide Coordinates';
+                }
+            }
+            else{
+                console.log("blah4")
+
+                if (image.src.includes('full_unit_circle_black.svg')) {
+                    image.src = 'full_unit_circle_black_no_coords.svg';
+                    toggleButton.textContent = 'Show Coordinates';
+                } else {
+                    image.src = 'full_unit_circle_black.svg';
                     toggleButton.textContent = 'Hide Coordinates';
                 }
             }
@@ -342,6 +346,7 @@
 
                 // Switch to the half unit circle SVG
                 image.src = 'full_unit_circle_black.svg';
+                console.log("blah2")
 
             } else {
                 toggleButton.classList.add('active');
@@ -357,6 +362,7 @@
             
                 // Switch to the full unit circle SVG
                 image.src = 'half_unit_circle_black.svg';
+                console.log("blah1")
             
             }
 
