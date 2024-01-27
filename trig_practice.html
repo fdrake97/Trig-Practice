@@ -300,15 +300,24 @@
             var image = document.getElementById('vectorImage');
             var toggleButton = document.getElementById('toggleButton');
 
-            // Toggle between two SVGs
-            if (image.src.includes('full_unit_circle_black.svg')) {
-                image.src = 'full_unit_circle_black_no_coords.svg';
-                toggleButton.textContent = 'Show Coordinates';
-            } else {
-                image.src = 'full_unit_circle_black.svg';
-                toggleButton.textContent = 'Hide Coordinates';
+            if (toggleButton.classList.contains('active')) {
+                // Toggle between two SVGs
+                if (image.src.includes('full_unit_circle_black.svg')) {
+                    image.src = 'full_unit_circle_black_no_coords.svg';
+                    toggleButton.textContent = 'Show Coordinates';
+                } else {
+                    image.src = 'full_unit_circle_black.svg';
+                    toggleButton.textContent = 'Hide Coordinates';
+                }
             }
-
+            else{
+                if (image.src.includes('half_unit_circle_black.svg')) {
+                    image.src = 'half_unit_circle_black_no_coords.svg';
+                    toggleButton.textContent = 'Show Coordinates';
+                } else {
+                    image.src = 'half_unit_circle_black.svg';
+                    toggleButton.textContent = 'Hide Coordinates';
+                }
         }
 
         // Add this function to handle the toggle
