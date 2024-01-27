@@ -41,14 +41,17 @@
             background-color: #4fa3d1;
         }
 
-        #question-container {
+        #question-answer-container {
             margin-bottom: 20px;
+            padding: 10px;
+            border: 1px solid #fff;
+            border-radius: 5px;
+            display: inline-block; /* Set display to inline-block to shrink-wrap the content */
+            width: 300px;
         }
 
-        form {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+        #question-container {
+            font-size: 24px;
         }
 
         #userAnswer {
@@ -56,6 +59,12 @@
             color: #fff;
             padding: 10px;
             margin-bottom: 10px;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
         #result {
@@ -66,6 +75,23 @@
         #avgTime {
             margin-top: 20px;
         }
+
+        #vectorImage {
+            width: 50%; /* Set the image size to half of its original size */
+            height: auto; /* Maintain aspect ratio */
+        }
+
+        #svg-container {
+            margin-top: 20px; /* Adjust the margin to position the image below the buttons */
+        }
+
+        #toggle180to360.active {
+            background-color: #000;
+            color: #fff;
+            border: 2px solid #61dafb;
+            padding: 8px 13px; /* Adjust the padding to compensate for the border */
+        }
+
     </style>
 </head>
 <body>
@@ -96,21 +122,27 @@
     </div>
 
     <div id="app-container">
-        <h1>Trig Practice</h1>
-        <div id="question-container"></div>
-        <form onsubmit="checkAnswer(); return false;">
-            <input type="text" id="userAnswer" placeholder="Your answer" autocomplete="off">
-        </form>
+        <div id="question-answer-container">
+            <div id="question-container"></div>
+            <form onsubmit="checkAnswer(); return false;">
+                <input type="text" id="userAnswer" placeholder="Your answer" autocomplete="off" autofocus>
+            </form>
+        </div>
         <p id="result"></p>
         <p id="avgTime">Average Time Per Question: <span id="avgTimeValue">0.0</span> seconds</p>
         <p>Current Streak: <span id="currentStreak">0</span></p>
         <p>Highest Streak: <span id="highestStreak">0</span></p>
         <button onclick="resetCounters()">Reset</button>
         <button onclick="showInstructions()">Instructions</button>
+        <button id="toggle180to360" onclick="toggle180to360()" class="active">180° to 360°</button>
+        <br>
+        <button id="hideCircleButton" onclick="hideCircle()">Hide Circle</button>
+        <br>
+        <button id="toggleButton" onclick="toggleCoordinates()">Hide Coordinates</button>
+
         <div id="svg-container">
             <img id="vectorImage" src="half_unit_circle_black.svg" alt="Half Unit Circle" />
         </div>
-        <button id="toggleButton" onclick="toggleCoordinates()">Hide Coordinates</button>
     </div>
 
     <script>
@@ -118,6 +150,9 @@
             document.querySelector('.info-container').style.display = 'none';
             document.getElementById('app-container').style.display = 'block';
             generateQuestion(); // Start the app by generating the first question
+
+            // Set focus on the answer box
+            document.getElementById('userAnswer').focus(); 
         }
 
         var currentStreak = 0; // Counter for current streak
@@ -130,17 +165,19 @@
 
         // Function to generate a random question
         function generateQuestion() {
-            var angles = [0, 30, 45, 60, 90, 120, 135, 150, 180];
-            var randomAngle = angles[Math.floor(Math.random() * angles.length)];
-            var isSine = Math.random() < 0.5; // 50% chance of asking for sine
+            var randomAngle = possibleAngles[Math.floor(Math.random() * possibleAngles.length)];
+            var isSine = Math.random() < 0.5;
 
             var questionText = isSine ? "sin" : "cos";
             questionText += "(" + randomAngle + ")";
-            
+
             document.getElementById("question-container").innerHTML = "<p>" + questionText + "</p>";
-            
+
             // Set the correct answers for each specific question
-            window.correctAnswer = getCorrectAnswer(isSine, randomAngle);
+            window.currentQuestion = {
+                isSine: isSine,
+                angle: randomAngle
+            };
 
             // Clear the result text
             document.getElementById("result").innerHTML = "";
@@ -149,30 +186,20 @@
             lastQuestionTime = new Date().getTime();
         }
 
-        // Function to get the correct answer for a specific question
-        function getCorrectAnswer(isSine, angle) {
-            if (angle === 0 && isSine) return "0";
-            if (angle === 90 && !isSine) return "0";
-            if ((angle === 30 && isSine) || (angle === 60 && !isSine) || (angle === 150 && isSine)) return "1/2";
-            if ((angle === 45 && isSine) || (angle === 45 && !isSine) || (angle === 135 && isSine)) return "r2/2";
-            if ((angle === 60 && isSine) || (angle === 30 && !isSine) || (angle === 120 && isSine)) return "r3/2";
-            if (angle === 90 && isSine) return "1";
-            if (angle === 0 && !isSine) return "1";
-            if (angle === 120 && !isSine) return "-1/2";
-            if (angle === 135 && !isSine) return "-r2/2";
-            if (angle === 150 && !isSine) return "-r3/2";
-            if (angle === 180 && isSine) return "0"; // Corrected to "0" for sin(180)
-            if (angle === 180 && !isSine) return "-1"; // Corrected to "-1" for cos(180)
 
-            return ""; // Default, should not happen
-        }
+        // Arrays for possible angles, correct sine answers, and correct cosine answers
+        var possibleAngles = [0, 30, 45, 60, 90, 120, 135, 150, 180];
+        var correctSineAnswers = ["0", "1/2", "r2/2", "r3/2", "1", "r3/2", "r2/2", "1/2", "0"];
+        var correctCosineAnswers = ["1", "r3/2", "r2/2", "1/2", "0", "-1/2", "-r2/2", "-r3/2", "-1"];
 
         // Function to check the user's answer
         function checkAnswer() {
             var userAnswer = document.getElementById("userAnswer").value.toLowerCase();
-            
+
             if (isAnswerOption(userAnswer)) {
-                if (userAnswer === window.correctAnswer) {
+                var correctAnswer = getCorrectAnswer(currentQuestion.isSine, currentQuestion.angle);
+
+                if (userAnswer === correctAnswer) {
                     document.getElementById("result").innerHTML = "Correct! Well done!";
                     currentStreak++;
                     totalCorrectAnswers++;
@@ -182,26 +209,23 @@
                         document.getElementById("highestStreak").innerText = highestStreak;
                     }
 
-                    // Calculate time between question and correct answer
                     var currentTime = new Date().getTime();
-                    var elapsedTime = (currentTime - lastQuestionTime) / 1000; // in seconds with 1 decimal place
+                    var elapsedTime = (currentTime - lastQuestionTime) / 1000;
                     totalElapsedTime += elapsedTime;
 
-                    // Update average time
                     var averageTime = totalCorrectAnswers > 0 ? (totalElapsedTime / totalCorrectAnswers).toFixed(1) : 0.0;
                     document.getElementById("avgTimeValue").innerText = averageTime;
 
-                    generateQuestion(); // Ask a new question
+                    generateQuestion();
                 } else {
                     document.getElementById("result").innerHTML = "Incorrect. Please try again.";
-                    currentStreak = 0; // Reset streak if the answer is incorrect
+                    currentStreak = 0;
                     document.getElementById("currentStreak").innerText = currentStreak;
                 }
             } else {
-                document.getElementById("result").innerHTML = "Please enter a valid answer option.";
+                document.getElementByIsd("result").innerHTML = "Please enter a valid answer option.";
             }
 
-            // Clear the user's answer input
             document.getElementById("userAnswer").value = "";
         }
 
@@ -209,6 +233,17 @@
         function isAnswerOption(answer) {
             var answerOptions = ["0", "1/2", "r2/2", "r3/2", "1", "-1/2", "-r2/2", "-r3/2", "-1"];
             return answerOptions.includes(answer);
+        }
+
+        // Function to get the correct answer for a specific question
+        function getCorrectAnswer(isSine, angle) {
+            var index = possibleAngles.indexOf(angle);
+
+            if (isSine) {
+                return correctSineAnswers[index];
+            } else {
+                return correctCosineAnswers[index];
+            }
         }
 
         // Function to reset all counters and timers
@@ -226,6 +261,8 @@
             document.getElementById("avgTimeValue").innerText = "0.0";
 
             generateQuestion(); // Ask a new question after reset
+            document.getElementById('userAnswer').focus(); 
+
         }
 
         // Function to show instructions (take user back to the intro page)
@@ -234,6 +271,31 @@
             document.querySelector('.info-container').style.display = 'block';
         }
 
+        var isCircleHidden = false; // Track the state of the circle
+
+        // Function to hide/show the circle and toggle button
+        function hideCircle() {
+            var image = document.getElementById('vectorImage');
+            var toggleButton = document.getElementById('toggleButton');
+            var hideCircleButton = document.getElementById('hideCircleButton');
+
+            if (isCircleHidden) {
+                // Show the circle and toggle button
+                image.style.visibility = 'visible';
+                toggleButton.style.visibility = 'visible';
+                hideCircleButton.textContent = 'Hide Circle';
+            } else {
+                // Hide the circle and toggle button
+                image.style.visibility = 'hidden';
+                toggleButton.style.visibility = 'hidden';
+                hideCircleButton.textContent = 'Show Circle';
+            }
+
+            // Toggle the state
+            isCircleHidden = !isCircleHidden;
+        }
+
+        // Function to toggle coordinates
         function toggleCoordinates() {
             var image = document.getElementById('vectorImage');
             var toggleButton = document.getElementById('toggleButton');
@@ -246,6 +308,41 @@
                 image.src = 'half_unit_circle_black.svg';
                 toggleButton.textContent = 'Hide Coordinates';
             }
+        }
+
+        // Add this function to handle the toggle
+        // Function to toggle between the original and extended angles and correct sine answers
+        function toggle180to360() {
+            var toggleButton = document.getElementById('toggle180to360');
+
+            // Toggle button style
+            if (toggleButton.classList.contains('active')) {
+                toggleButton.classList.remove('active');
+
+                // Use the extended possible angles array
+                possibleAngles = [0, 30, 45, 60, 90, 120, 135, 150, 180, 210, 225, 240, 270, 300, 315, 330];
+                
+                // Use the extended correct sine answers array
+                correctSineAnswers = ["0", "1/2", "r2/2", "r3/2", "1", "r3/2", "r2/2", "1/2", "0", "-1/2", "-r2/2", "-r3/2", "-1", "-r3/2", "-r2/2", "-1/2"];
+                
+                // Use the extended correct cosine answers array
+                correctCosineAnswers = ["1", "r3/2", "r2/2", "1/2", "0", "-1/2", "-r2/2", "-r3/2", "-1", "-r3/2", "-r2/2", "-1/2", "0", "1/2", "r2/2", "r3/2"];
+
+            } else {
+                toggleButton.classList.add('active');
+
+                // Revert to the original possible angles array
+                possibleAngles = [0, 30, 45, 60, 90, 120, 135, 150, 180];
+                
+                // Revert to the original correct sine answers array
+                correctSineAnswers = ["0", "1/2", "r2/2", "r3/2", "1", "r3/2", "r2/2", "1/2", "0"];
+                
+                // Revert to the original correct cosine answers array
+                correctCosineAnswers = ["1", "r3/2", "r2/2", "1/2", "0", "-1/2", "-r2/2", "-r3/2", "-1"];
+            }
+
+            // Generate a new question immediately after toggling
+            generateQuestion();
         }
         
     </script>
