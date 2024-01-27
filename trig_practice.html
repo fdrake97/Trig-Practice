@@ -301,19 +301,21 @@
             var toggleButton = document.getElementById('toggleButton');
 
             // Toggle between two SVGs
-            if (image.src.includes('half_unit_circle_black.svg')) {
-                image.src = 'half_unit_circle_black_no_coords.svg';
+            if (image.src.includes('full_unit_circle_black.svg')) {
+                image.src = 'full_unit_circle_black_no_coords.svg';
                 toggleButton.textContent = 'Show Coordinates';
             } else {
-                image.src = 'half_unit_circle_black.svg';
+                image.src = 'full_unit_circle_black.svg';
                 toggleButton.textContent = 'Hide Coordinates';
             }
+
         }
 
         // Add this function to handle the toggle
         // Function to toggle between the original and extended angles and correct sine answers
         function toggle180to360() {
             var toggleButton = document.getElementById('toggle180to360');
+            var image = document.getElementById('vectorImage');
 
             // Toggle button style
             if (toggleButton.classList.contains('active')) {
@@ -328,6 +330,9 @@
                 // Use the extended correct cosine answers array
                 correctCosineAnswers = ["1", "r3/2", "r2/2", "1/2", "0", "-1/2", "-r2/2", "-r3/2", "-1", "-r3/2", "-r2/2", "-1/2", "0", "1/2", "r2/2", "r3/2"];
 
+                // Switch to the half unit circle SVG
+                image.src = 'full_unit_circle_black.svg';
+
             } else {
                 toggleButton.classList.add('active');
 
@@ -339,6 +344,10 @@
                 
                 // Revert to the original correct cosine answers array
                 correctCosineAnswers = ["1", "r3/2", "r2/2", "1/2", "0", "-1/2", "-r2/2", "-r3/2", "-1"];
+            
+                // Switch to the full unit circle SVG
+                image.src = 'half_unit_circle_black.svg';
+            
             }
 
             // Generate a new question immediately after toggling
