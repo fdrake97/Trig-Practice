@@ -20,6 +20,10 @@
             text-align: left;
         }
 
+        #options {
+            display: none;
+        }
+
         #app-container {
             display: none;
         }
@@ -164,6 +168,54 @@
         .slider.round:before {
             border-radius: 50%;
         }
+
+
+
+
+
+        .sliderCC {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            -webkit-transition: .4s;
+            transition: .4s;
+        }
+
+        .sliderCC:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            -webkit-transition: .4s;
+            transition: .4s;
+        }
+
+
+        input:focus+.sliderCC {
+            box-shadow: 0 0 1px #2196F3;
+        }
+
+        input:checked+.sliderCC:before {
+            -webkit-transform: translateX(26px);
+            -ms-transform: translateX(26px);
+            transform: translateX(26px);
+        }
+
+        /* Rounded sliders */
+        .sliderCC.round {
+            border-radius: 34px;
+        }
+
+        .sliderCC.round:before {
+            border-radius: 50%;
+        }
     </style>
 </head>
 
@@ -195,6 +247,37 @@
         <button onclick="startPractice()">Practice</button>
     </div>
 
+    <div id="options">
+        <text>0° to 180°</text>
+        <label class="switch">
+            <input type="checkbox" id="Range">
+            <span class="sliderCC round"></span>
+        </label>
+        <text>0° to 360°</text>
+        <br>
+        <text>degrees</text>
+        <label class="switch">
+            <input type="checkbox" id="DegVsRad">
+            <span class="sliderCC round"></span>
+        </label>
+        <text>radians</text>
+        <br>
+        <text>Hide circle</text>
+        <label class="switch">
+            <input type="checkbox" id="ShowCirc">
+            <span class="slider round"></span>
+        </label>
+        <br>
+        <text>Hide coordinates</text>
+        <label class="switch">
+            <input type="checkbox" id="ShowCoord">
+            <span class="slider round"></span>
+        </label>
+        <br>
+        <button onclick="startPractice()">Start</button>
+    </div>
+
+
     <div id="app-container">
         <div id="question-answer-container">
             <div id="question-container"></div>
@@ -208,33 +291,8 @@
         <p>Highest Streak: <span id="highestStreak">0</span></p>
         <button onclick="resetCounters()">Reset</button>
         <button onclick="showInstructions()">Instructions</button>
+        <button onclick="showOptions()">Options</button>
         <br>
-        <text>0° to 180°</text>
-        <label class="switch">
-            <input type="checkbox" id="Range">
-            <span class="slider round"></span>
-        </label>
-        <text>0° to 360°</text>
-        <br>
-        <text>degrees</text>
-        <label class="switch">
-            <input type="checkbox" id="DegVsRad">
-            <span class="slider round"></span>
-        </label>
-        <text>radians</text>
-        <br>
-        <text>Show circle</text>
-        <label class="switch">
-            <input type="checkbox" id="ShowCirc">
-            <span class="slider round"></span>
-        </label>
-        <br>
-        <text>Show coordinates</text>
-        <label class="switch">
-            <input type="checkbox" id="ShowCoord">
-            <span class="slider round"></span>
-        </label>
-
         <div id="svg-container">
             <img id="vectorImage" src="half_unit_circle_black.svg" alt="Half Unit Circle" />
         </div>
@@ -244,32 +302,46 @@
 <script>
 
     let range_check = document.getElementById('Range');
-    let deg_check = document.getElementById('DegVsRad')
+    let deg_check = document.getElementById('DegVsRad');
+    let circle_check = document.getElementById('ShowCirc');
+    let coord_check = document.getElementById('ShowCoord')
     range_check.addEventListener('change', function () {
-        changeAnswers(range_check.checked, deg_check.checked)
-        let text_div = document.getElementById('switch2text');
+        changeAnswers(range_check.checked, deg_check.checked, coord_check.checked);
     })
-    deg_check.addEventListener('change', function() {
-        changeAnswers(range_check.checked, deg_check.checked)
-        let text_div = document.getElementById('switch2text');
+    deg_check.addEventListener('change', function () {
+        changeAnswers(range_check.checked, deg_check.checked, coord_check.checked);
+    })
+    circle_check.addEventListener('change', function () {
+        var image = document.getElementById('vectorImage');
+
+        if (!circle_check.checked) {
+            image.style.visibility = 'visible';
+        } else {
+            image.style.visibility = 'hidden';
+        }
+    })
+    coord_check.addEventListener('change', function () {
+        changeAnswers(range_check.checked, deg_check.checked, coord_check.checked);
     })
 
 
 
 
-    function changeAnswers(is360, isRad) {
+    function changeAnswers(is360, isRad, hideCoords) {
         let image = document.getElementById('vectorImage');
         if (!isRad) {
             if (is360) {
                 possibleAngles = ['0°', '30°', '45°', '60°', '90°', '120°', '135°', '150°', '180°', '210°', '225°', '240°', '270°', '300°', '315°', '330°'];
                 correctSineAnswers = ["0", "1/2", "r2/2", "r3/2", "1", "r3/2", "r2/2", "1/2", "0", "-1/2", "-r2/2", "-r3/2", "-1", "-r3/2", "-r2/2", "-1/2"];
                 correctCosineAnswers = ["1", "r3/2", "r2/2", "1/2", "0", "-1/2", "-r2/2", "-r3/2", "-1", "-r3/2", "-r2/2", "-1/2", "0", "1/2", "r2/2", "r3/2"];
-                image.src = 'full_unit_circle_black.svg';
+                if (hideCoords) { image.src = 'full_unit_circle_black_no_coords.svg'; }
+                else { image.src = 'full_unit_circle_black.svg'; }
             } else {
                 possibleAngles = ['0°', '30°', '45°', '60°', '90°', '120°', '135°', '150°', '180°'];
                 correctSineAnswers = ["0", "1/2", "r2/2", "r3/2", "1", "r3/2", "r2/2", "1/2", "0"];
                 correctCosineAnswers = ["1", "r3/2", "r2/2", "1/2", "0", "-1/2", "-r2/2", "-r3/2", "-1"];
-                image.src = 'half_unit_circle_black.svg';
+                if (hideCoords) { image.src = 'half_unit_circle_black.svg_no_coords.svg'; }
+                else { image.src = 'half_unit_circle_black.svg'; }
             }
         }
         else {
@@ -277,27 +349,23 @@
                 possibleAngles = ["0", "π/6", "π/4", "π/3", "π/2", "2π/3", "3π/4", "5π/6", "π", "7π/6", "5π/4", "4π/3", "3π/2", "5π/3", "7π/4", "11π/6"];
                 correctSineAnswers = ["0", "1/2", "r2/2", "r3/2", "1", "r3/2", "r2/2", "1/2", "0", "-1/2", "-r2/2", "-r3/2", "-1", "-r3/2", "-r2/2", "-1/2"];
                 correctCosineAnswers = ["1", "r3/2", "r2/2", "1/2", "0", "-1/2", "-r2/2", "-r3/2", "-1", "-r3/2", "-r2/2", "-1/2", "0", "1/2", "r2/2", "r3/2"];
-                image.src = 'full_unit_circle_rad.svg';
+                if (hideCoords) { image.src = 'full_unit_circle_rad_no_coords.svg'; }
+                else { image.src = 'full_unit_circle_rad.svg'; }
             } else {
                 possibleAngles = ["0", "π/6", "π/4", "π/3", "π/2", "2π/3", "3π/4", "5π/6", "π"];
                 correctSineAnswers = ["0", "1/2", "r2/2", "r3/2", "1", "r3/2", "r2/2", "1/2", "0"];
                 correctCosineAnswers = ["1", "r3/2", "r2/2", "1/2", "0", "-1/2", "-r2/2", "-r3/2", "-1"];
-                image.src = 'half_unit_circle_rad.svg';
+                if (hideCoords) { image.src = 'half_unit_circle_rad_no_coords.svg'; }
+                else { image.src = 'half_unit_circle_rad.svg'; }
             }
         }
+        generateQuestion();
     }
-
-
-
-
-
-
-
-
 
     function startPractice() {
 
         document.querySelector('.info-container').style.display = 'none';
+        document.getElementById('options').style.display = 'none';
         document.getElementById('app-container').style.display = 'block';
         generateQuestion(); // Start the app by generating the first question
 
@@ -423,6 +491,11 @@
     function showInstructions() {
         document.getElementById('app-container').style.display = 'none';
         document.querySelector('.info-container').style.display = 'block';
+    }
+
+    function showOptions() {
+        document.getElementById('app-container').style.display = 'none';
+        document.getElementById('options').style.display = 'block';
     }
 
 </script>
