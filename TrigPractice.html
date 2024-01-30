@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trig Practice</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 50px;
+            background-color: #000;
+            color: #fff;
+        }
+
+        .info-container {
+            max-width: 600px;
+            margin: 0 auto;
+            text-align: left;
+        }
+
+        #app-container {
+            display: none;
+        }
+
+        h1,
+        p,
+        button {
+            color: #fff;
+        }
+
+        button {
+            background-color: #61dafb;
+            color: #282c35;
+            padding: 10px 15px;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background-color: #4fa3d1;
+        }
+
+        #question-answer-container {
+            margin-bottom: 20px;
+            padding: 10px;
+            border: 1px solid #fff;
+            border-radius: 5px;
+            display: inline-block;
+            /* Set display to inline-block to shrink-wrap the content */
+            width: 300px;
+        }
+
+        #question-container {
+            font-size: 24px;
+        }
+
+        #userAnswer {
+            background-color: #000;
+            color: #fff;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        #result {
+            margin-top: 10px;
+            font-weight: bold;
+        }
+
+        #avgTime {
+            margin-top: 20px;
+        }
+
+        #vectorImage {
+            width: 50%;
+            /* Set the image size to half of its original size */
+            height: auto;
+            /* Maintain aspect ratio */
+        }
+
+        #svg-container {
+            margin-top: 20px;
+            /* Adjust the margin to position the image below the buttons */
+        }
+
+        #toggle180.active,
+        #toggle360.active,
+        #toggleRad.active,
+        #toggleDeg.active {
+            background-color: #000;
+            color: #fff;
+            border: 2px solid #61dafb;
+            padding: 8px 13px;
+            /* Adjust the padding to compensate for the border */
+        }
+
+
+
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            -webkit-transition: .4s;
+            transition: .4s;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            -webkit-transition: .4s;
+            transition: .4s;
+        }
+
+        input:checked+.slider {
+            background-color: #2196F3;
+        }
+
+        input:focus+.slider {
+            box-shadow: 0 0 1px #2196F3;
+        }
+
+        input:checked+.slider:before {
+            -webkit-transform: translateX(26px);
+            -ms-transform: translateX(26px);
+            transform: translateX(26px);
+        }
+
+        /* Rounded sliders */
+        .slider.round {
+            border-radius: 34px;
+        }
+
+        .slider.round:before {
+            border-radius: 50%;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="info-container">
+        <h1>Instructions</h1>
+        <p>
+            To input non-integer answers, use the following format:
+            <br>
+            - Fractions: x/y (e.g., 1/2, not 0.5)
+            <br>
+            - Square root: rx/y (e.g., r2/2 for the square root of 2 over 2)
+        </p>
+        <p>
+            The available answer options are:
+        <ul>
+            <li>0</li>
+            <li>1/2</li>
+            <li>r2/2</li>
+            <li>r3/2</li>
+            <li>1</li>
+            <li>-1/2</li>
+            <li>-r2/2</li>
+            <li>-r3/2</li>
+            <li>-1</li>
+        </ul>
+        </p>
+        <!-- Add a button for Practice mode -->
+        <button onclick="startPractice()">Practice</button>
+    </div>
+
+    <div id="app-container">
+        <div id="question-answer-container">
+            <div id="question-container"></div>
+            <form onsubmit="checkAnswer(); return false;">
+                <input type="text" id="userAnswer" placeholder="Your answer" autocomplete="off" autofocus>
+            </form>
+        </div>
+        <p id="result"></p>
+        <p id="avgTime">Average Time Per Question: <span id="avgTimeValue">0.0</span> seconds</p>
+        <p>Current Streak: <span id="currentStreak">0</span></p>
+        <p>Highest Streak: <span id="highestStreak">0</span></p>
+        <button onclick="resetCounters()">Reset</button>
+        <button onclick="showInstructions()">Instructions</button>
+        <br>
+        <text>0° to 180°</text>
+        <label class="switch">
+            <input type="checkbox" id="Range">
+            <span class="slider round"></span>
+        </label>
+        <text>0° to 360°</text>
+        <br>
+        <text>degrees</text>
+        <label class="switch">
+            <input type="checkbox" id="DegVsRad">
+            <span class="slider round"></span>
+        </label>
+        <text>radians</text>
+        <br>
+        <text>Show circle</text>
+        <label class="switch">
+            <input type="checkbox" id="ShowCirc">
+            <span class="slider round"></span>
+        </label>
+        <br>
+        <text>Show coordinates</text>
+        <label class="switch">
+            <input type="checkbox" id="ShowCoord">
+            <span class="slider round"></span>
+        </label>
+
+        <div id="svg-container">
+            <img id="vectorImage" src="half_unit_circle_black.svg" alt="Half Unit Circle" />
+        </div>
+    </div>
+</body>
+
+<script>
+
+    let range_check = document.getElementById('Range');
+    let deg_check = document.getElementById('DegVsRad')
+    range_check.addEventListener('change', function () {
+        changeAnswers(range_check.checked, deg_check.checked)
+        let text_div = document.getElementById('switch2text');
+    })
+    deg_check.addEventListener('change', function() {
+        changeAnswers(range_check.checked, deg_check.checked)
+        let text_div = document.getElementById('switch2text');
+    })
+
+
+
+
+    function changeAnswers(is360, isRad) {
+        let image = document.getElementById('vectorImage');
+        if (!isRad) {
+            if (is360) {
+                possibleAngles = ['0°', '30°', '45°', '60°', '90°', '120°', '135°', '150°', '180°', '210°', '225°', '240°', '270°', '300°', '315°', '330°'];
+                correctSineAnswers = ["0", "1/2", "r2/2", "r3/2", "1", "r3/2", "r2/2", "1/2", "0", "-1/2", "-r2/2", "-r3/2", "-1", "-r3/2", "-r2/2", "-1/2"];
+                correctCosineAnswers = ["1", "r3/2", "r2/2", "1/2", "0", "-1/2", "-r2/2", "-r3/2", "-1", "-r3/2", "-r2/2", "-1/2", "0", "1/2", "r2/2", "r3/2"];
+                image.src = 'full_unit_circle_black.svg';
+            } else {
+                possibleAngles = ['0°', '30°', '45°', '60°', '90°', '120°', '135°', '150°', '180°'];
+                correctSineAnswers = ["0", "1/2", "r2/2", "r3/2", "1", "r3/2", "r2/2", "1/2", "0"];
+                correctCosineAnswers = ["1", "r3/2", "r2/2", "1/2", "0", "-1/2", "-r2/2", "-r3/2", "-1"];
+                image.src = 'half_unit_circle_black.svg';
+            }
+        }
+        else {
+            if (is360) {
+                possibleAngles = ["0", "π/6", "π/4", "π/3", "π/2", "2π/3", "3π/4", "5π/6", "π", "7π/6", "5π/4", "4π/3", "3π/2", "5π/3", "7π/4", "11π/6"];
+                correctSineAnswers = ["0", "1/2", "r2/2", "r3/2", "1", "r3/2", "r2/2", "1/2", "0", "-1/2", "-r2/2", "-r3/2", "-1", "-r3/2", "-r2/2", "-1/2"];
+                correctCosineAnswers = ["1", "r3/2", "r2/2", "1/2", "0", "-1/2", "-r2/2", "-r3/2", "-1", "-r3/2", "-r2/2", "-1/2", "0", "1/2", "r2/2", "r3/2"];
+                image.src = 'full_unit_circle_rad.svg';
+            } else {
+                possibleAngles = ["0", "π/6", "π/4", "π/3", "π/2", "2π/3", "3π/4", "5π/6", "π"];
+                correctSineAnswers = ["0", "1/2", "r2/2", "r3/2", "1", "r3/2", "r2/2", "1/2", "0"];
+                correctCosineAnswers = ["1", "r3/2", "r2/2", "1/2", "0", "-1/2", "-r2/2", "-r3/2", "-1"];
+                image.src = 'half_unit_circle_rad.svg';
+            }
+        }
+    }
+
+
+
+
+
+
+
+
+
+    function startPractice() {
+
+        document.querySelector('.info-container').style.display = 'none';
+        document.getElementById('app-container').style.display = 'block';
+        generateQuestion(); // Start the app by generating the first question
+
+        // Set focus on the answer box
+        document.getElementById('userAnswer').focus();
+    }
+
+    var currentStreak = 0; // Counter for current streak
+    var highestStreak = 0; // Counter for highest streak
+    var timerActive = false;
+    var startTime;
+    var lastQuestionTime;
+    var totalCorrectAnswers = 0;
+    var totalElapsedTime = 0;
+
+    // Function to generate a random question
+    function generateQuestion() {
+        var randomAngle = possibleAngles[Math.floor(Math.random() * possibleAngles.length)];
+        var isSine = Math.random() < 0.5;
+
+        var questionText = isSine ? "sin" : "cos";
+        questionText += "(" + randomAngle + ")";
+
+        document.getElementById("question-container").innerHTML = "<p>" + questionText + "</p>";
+
+        // Set the correct answers for each specific question
+        window.currentQuestion = {
+            isSine: isSine,
+            angle: randomAngle
+        };
+
+        // Clear the result text
+        document.getElementById("result").innerHTML = "";
+
+        // Record the time when the question is displayed
+        lastQuestionTime = new Date().getTime();
+    }
+
+    // Arrays for possible angles, correct sine answers, and correct cosine answers
+    var possibleAngles = ['0°', '30°', '45°', '60°', '90°', '120°', '135°', '150°', '180°'];
+    var correctSineAnswers = ["0", "1/2", "r2/2", "r3/2", "1", "r3/2", "r2/2", "1/2", "0"];
+    var correctCosineAnswers = ["1", "r3/2", "r2/2", "1/2", "0", "-1/2", "-r2/2", "-r3/2", "-1"];
+
+    // Function to check the user's answer
+    function checkAnswer() {
+        var userAnswer = document.getElementById("userAnswer").value.toLowerCase();
+
+        // Check if the user has entered something
+        if (userAnswer.trim() === "") {
+            return;  // Do nothing if the answer is empty
+        }
+
+        if (isAnswerOption(userAnswer)) {
+            var correctAnswer = getCorrectAnswer(currentQuestion.isSine, currentQuestion.angle);
+
+            if (userAnswer === correctAnswer) {
+                document.getElementById("result").innerHTML = "Correct! Well done!";
+                currentStreak++;
+                totalCorrectAnswers++;
+                document.getElementById("currentStreak").innerText = currentStreak;
+                if (currentStreak > highestStreak) {
+                    highestStreak = currentStreak;
+                    document.getElementById("highestStreak").innerText = highestStreak;
+                }
+
+                var currentTime = new Date().getTime();
+                var elapsedTime = (currentTime - lastQuestionTime) / 1000;
+                totalElapsedTime += elapsedTime;
+
+                var averageTime = totalCorrectAnswers > 0 ? (totalElapsedTime / totalCorrectAnswers).toFixed(1) : 0.0;
+                document.getElementById("avgTimeValue").innerText = averageTime;
+
+                generateQuestion();
+            } else {
+                document.getElementById("result").innerHTML = "Incorrect. Please try again.";
+                currentStreak = 0;
+                document.getElementById("currentStreak").innerText = currentStreak;
+            }
+        } else {
+            document.getElementByIsd("result").innerHTML = "Please enter a valid answer option.";
+        }
+
+        document.getElementById("userAnswer").value = "";
+    }
+
+    // Function to check if the provided answer is one of the predefined options
+    function isAnswerOption(answer) {
+        var answerOptions = ["0", "1/2", "r2/2", "r3/2", "1", "-1/2", "-r2/2", "-r3/2", "-1"];
+        return answerOptions.includes(answer);
+    }
+
+    // Function to get the correct answer for a specific question
+    function getCorrectAnswer(isSine, angle) {
+        var index = possibleAngles.indexOf(angle);
+
+        if (isSine) {
+            return correctSineAnswers[index];
+        } else {
+            return correctCosineAnswers[index];
+        }
+    }
+
+    // Function to reset all counters and timers
+    function resetCounters() {
+        currentStreak = 0;
+        highestStreak = 0;
+        timerActive = false;
+        startTime = 0;
+        lastQuestionTime = 0;
+        totalCorrectAnswers = 0;
+        totalElapsedTime = 0;
+
+        document.getElementById("currentStreak").innerText = currentStreak;
+        document.getElementById("highestStreak").innerText = highestStreak;
+        document.getElementById("avgTimeValue").innerText = "0.0";
+
+        generateQuestion(); // Ask a new question after reset
+        document.getElementById('userAnswer').focus();
+
+    }
+
+    // Function to show instructions (take user back to the intro page)
+    function showInstructions() {
+        document.getElementById('app-container').style.display = 'none';
+        document.querySelector('.info-container').style.display = 'block';
+    }
+
+</script>
