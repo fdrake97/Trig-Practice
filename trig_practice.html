@@ -85,7 +85,7 @@
             margin-top: 20px; /* Adjust the margin to position the image below the buttons */
         }
 
-        #toggle180to360.active {
+        #toggle180.active, #toggle360.active, #toggleRad.active, #toggleDeg.active {
             background-color: #000;
             color: #fff;
             border: 2px solid #61dafb;
@@ -118,7 +118,8 @@
                 <li>-1</li>
             </ul>
         </p>
-        <button onclick="startApp()">Start</button>
+        <!-- Add a button for Practice mode -->
+        <button onclick="startPractice()">Practice</button>
     </div>
 
     <div id="app-container">
@@ -134,7 +135,12 @@
         <p>Highest Streak: <span id="highestStreak">0</span></p>
         <button onclick="resetCounters()">Reset</button>
         <button onclick="showInstructions()">Instructions</button>
-        <button id="toggle180to360" onclick="toggle180to360()" class="active">180° to 360°</button>
+        <br>
+        <button id="toggle180" onclick="toggle180to360()">0° to 180°</button>
+        <button id="toggle360" onclick="toggle180to360()" class="active">0° to 360°</button>
+        <br>
+        <button id="toggleDeg" onclick="toggleRad()">Degrees</button>
+        <button id="toggleRad" onclick="toggleRad()" class="active">Radians</button>
         <br>
         <button id="hideCircleButton" onclick="hideCircle()">Hide Circle</button>
         <br>
@@ -146,7 +152,8 @@
     </div>
 
     <script>
-        function startApp() {
+        function startPractice() {
+
             document.querySelector('.info-container').style.display = 'none';
             document.getElementById('app-container').style.display = 'block';
             generateQuestion(); // Start the app by generating the first question
@@ -186,15 +193,19 @@
             lastQuestionTime = new Date().getTime();
         }
 
-
         // Arrays for possible angles, correct sine answers, and correct cosine answers
-        var possibleAngles = [0, 30, 45, 60, 90, 120, 135, 150, 180];
+        var possibleAngles = ['0°', '30°', '45°', '60°', '90°', '120°', '135°', '150°', '180°'];
         var correctSineAnswers = ["0", "1/2", "r2/2", "r3/2", "1", "r3/2", "r2/2", "1/2", "0"];
         var correctCosineAnswers = ["1", "r3/2", "r2/2", "1/2", "0", "-1/2", "-r2/2", "-r3/2", "-1"];
 
         // Function to check the user's answer
         function checkAnswer() {
             var userAnswer = document.getElementById("userAnswer").value.toLowerCase();
+
+            // Check if the user has entered something
+            if (userAnswer.trim() === "") {
+                return;  // Do nothing if the answer is empty
+            }
 
             if (isAnswerOption(userAnswer)) {
                 var correctAnswer = getCorrectAnswer(currentQuestion.isSine, currentQuestion.angle);
@@ -223,7 +234,7 @@
                     document.getElementById("currentStreak").innerText = currentStreak;
                 }
             } else {
-                document.getElementById("result").innerHTML = "Please enter a valid answer option.";
+                document.getElementByIsd("result").innerHTML = "Please enter a valid answer option.";
             }
 
             document.getElementById("userAnswer").value = "";
@@ -280,18 +291,14 @@
             var hideCircleButton = document.getElementById('hideCircleButton');
 
             if (isCircleHidden) {
-                // Show the circle and toggle button
                 image.style.visibility = 'visible';
                 toggleButton.style.visibility = 'visible';
                 hideCircleButton.textContent = 'Hide Circle';
             } else {
-                // Hide the circle and toggle button
                 image.style.visibility = 'hidden';
                 toggleButton.style.visibility = 'hidden';
                 hideCircleButton.textContent = 'Show Circle';
             }
-
-            // Toggle the state
             isCircleHidden = !isCircleHidden;
         }
 
@@ -299,77 +306,134 @@
         function toggleCoordinates() {
             var image = document.getElementById('vectorImage');
             var toggleButton = document.getElementById('toggleButton');
-            var toggle180to360 = document.getElementById('toggle180to360');
 
-            if (toggle180to360.classList.contains('active')) {
-                console.log("blah3")
-                // Toggle between two SVGs
-                if (image.src.includes('half_unit_circle_black.svg')) {
-                    image.src = 'half_unit_circle_black_no_coords.svg';
-                    toggleButton.textContent = 'Show Coordinates';
+            if (image.src.includes('half_unit_circle_black.svg')) {
+                image.src = 'half_unit_circle_black_no_coords.svg';
+                toggleButton.textContent = 'Show Coordinates';
+            }
+            else if(image.src.includes('half_unit_circle_black_no_coords.svg')) {
+                image.src = 'half_unit_circle_black.svg';
+                toggleButton.textContent = 'Hide Coordinates';
+            }
+            else if (image.src.includes('full_unit_circle_black.svg')) {
+                image.src = 'full_unit_circle_black_no_coords.svg';
+                toggleButton.textContent = 'Show Coordinates';
+            }
+            else if (image.src.includes('full_unit_circle_black_no_coords.svg')) {
+                image.src = 'full_unit_circle_black.svg';
+                toggleButton.textContent = 'Hide Coordinates';
+            }
+            else if (image.src.includes('half_unit_circle_rad.svg')) {
+                image.src = 'half_unit_circle_rad_no_coords.svg';
+                toggleButton.textContent = 'Show Coordinates';
+            }
+            else if(image.src.includes('half_unit_circle_rad_no_coords.svg')) {
+                image.src = 'half_unit_circle_rad.svg';
+                toggleButton.textContent = 'Hide Coordinates';
+            }
+            else if (image.src.includes('full_unit_circle_rad.svg')) {
+                image.src = 'full_unit_circle_rad_no_coords.svg';
+                toggleButton.textContent = 'Show Coordinates';
+            }
+            else if (image.src.includes('full_unit_circle_rad_no_coords.svg')) {
+                image.src = 'full_unit_circle_rad.svg';
+                toggleButton.textContent = 'Hide Coordinates';
+            }
+        }
+
+        // Function to toggle between the original and extended angles and correct sine answers
+        function toggle180to360() {
+            var toggleButton180 = document.getElementById('toggle180');
+            var toggleButton360 = document.getElementById('toggle360');
+            var toggleRad = document.getElementById('toggleRad');
+            var image = document.getElementById('vectorImage');
+
+            if (toggleRad.classList.contains('active')) {
+                if (toggleButton360.classList.contains('active')) {
+                    toggleButton360.classList.remove('active');
+                    toggleButton180.classList.add('active');
+                    possibleAngles = ['0°', '30°', '45°', '60°', '90°', '120°', '135°', '150°', '180°', '210°', '225°', '240°', '270°', '300°', '315°', '330°'];
+                    correctSineAnswers = ["0", "1/2", "r2/2", "r3/2", "1", "r3/2", "r2/2", "1/2", "0", "-1/2", "-r2/2", "-r3/2", "-1", "-r3/2", "-r2/2", "-1/2"];
+                    correctCosineAnswers = ["1", "r3/2", "r2/2", "1/2", "0", "-1/2", "-r2/2", "-r3/2", "-1", "-r3/2", "-r2/2", "-1/2", "0", "1/2", "r2/2", "r3/2"];
+                    image.src = 'full_unit_circle_black.svg';
                 } else {
+                    toggleButton360.classList.add('active');
+                    toggleButton180.classList.remove('active');
+                    possibleAngles = ['0°', '30°', '45°', '60°', '90°', '120°', '135°', '150°', '180°'];
+                    correctSineAnswers = ["0", "1/2", "r2/2", "r3/2", "1", "r3/2", "r2/2", "1/2", "0"];
+                    correctCosineAnswers = ["1", "r3/2", "r2/2", "1/2", "0", "-1/2", "-r2/2", "-r3/2", "-1"];
                     image.src = 'half_unit_circle_black.svg';
-                    toggleButton.textContent = 'Hide Coordinates';
                 }
             }
             else{
-                console.log("blah4")
-
-                if (image.src.includes('full_unit_circle_black.svg')) {
-                    image.src = 'full_unit_circle_black_no_coords.svg';
-                    toggleButton.textContent = 'Show Coordinates';
+                if (toggleButton360.classList.contains('active')) {
+                    toggleButton360.classList.remove('active');
+                    toggleButton180.classList.add('active');
+                    possibleAngles = ["0", "π/6", "π/4", "π/3", "π/2", "2π/3", "3π/4", "5π/6", "π", "7π/6", "5π/4", "4π/3", "3π/2", "5π/3", "7π/4", "11π/6"];
+                    correctSineAnswers = ["0", "1/2", "r2/2", "r3/2", "1", "r3/2", "r2/2", "1/2", "0", "-1/2", "-r2/2", "-r3/2", "-1", "-r3/2", "-r2/2", "-1/2"];
+                    correctCosineAnswers = ["1", "r3/2", "r2/2", "1/2", "0", "-1/2", "-r2/2", "-r3/2", "-1", "-r3/2", "-r2/2", "-1/2", "0", "1/2", "r2/2", "r3/2"];
+                    image.src = 'full_unit_circle_rad.svg';
                 } else {
-                    image.src = 'full_unit_circle_black.svg';
-                    toggleButton.textContent = 'Hide Coordinates';
+                    toggleButton360.classList.add('active');
+                    toggleButton180.classList.remove('active');
+                    possibleAngles = ["0", "π/6", "π/4", "π/3", "π/2", "2π/3", "3π/4", "5π/6", "π"];
+                    correctSineAnswers = ["0", "1/2", "r2/2", "r3/2", "1", "r3/2", "r2/2", "1/2", "0"];
+                    correctCosineAnswers = ["1", "r3/2", "r2/2", "1/2", "0", "-1/2", "-r2/2", "-r3/2", "-1"];
+                    image.src = 'half_unit_circle_rad.svg';
                 }
             }
-        }
 
-        // Add this function to handle the toggle
-        // Function to toggle between the original and extended angles and correct sine answers
-        function toggle180to360() {
-            var toggleButton = document.getElementById('toggle180to360');
-            var image = document.getElementById('vectorImage');
-
-            // Toggle button style
-            if (toggleButton.classList.contains('active')) {
-                toggleButton.classList.remove('active');
-
-                // Use the extended possible angles array
-                possibleAngles = [0, 30, 45, 60, 90, 120, 135, 150, 180, 210, 225, 240, 270, 300, 315, 330];
-                
-                // Use the extended correct sine answers array
-                correctSineAnswers = ["0", "1/2", "r2/2", "r3/2", "1", "r3/2", "r2/2", "1/2", "0", "-1/2", "-r2/2", "-r3/2", "-1", "-r3/2", "-r2/2", "-1/2"];
-                
-                // Use the extended correct cosine answers array
-                correctCosineAnswers = ["1", "r3/2", "r2/2", "1/2", "0", "-1/2", "-r2/2", "-r3/2", "-1", "-r3/2", "-r2/2", "-1/2", "0", "1/2", "r2/2", "r3/2"];
-
-                // Switch to the half unit circle SVG
-                image.src = 'full_unit_circle_black.svg';
-                console.log("blah2")
-
-            } else {
-                toggleButton.classList.add('active');
-
-                // Revert to the original possible angles array
-                possibleAngles = [0, 30, 45, 60, 90, 120, 135, 150, 180];
-                
-                // Revert to the original correct sine answers array
-                correctSineAnswers = ["0", "1/2", "r2/2", "r3/2", "1", "r3/2", "r2/2", "1/2", "0"];
-                
-                // Revert to the original correct cosine answers array
-                correctCosineAnswers = ["1", "r3/2", "r2/2", "1/2", "0", "-1/2", "-r2/2", "-r3/2", "-1"];
             
-                // Switch to the full unit circle SVG
-                image.src = 'half_unit_circle_black.svg';
-                console.log("blah1")
-            
-            }
-
-            // Generate a new question immediately after toggling
             generateQuestion();
         }
         
+        function toggleRad() {
+            var toggleButton180 = document.getElementById('toggle180');
+            var toggleButton360 = document.getElementById('toggle360');
+            var toggleRad = document.getElementById('toggleRad');
+            var toggleDeg = document.getElementById('toggleDeg');
+            var image = document.getElementById('vectorImage');
+
+            if (toggleButton360.classList.contains('active')) {
+                if (toggleRad.classList.contains('active')) {
+                    toggleRad.classList.remove('active');
+                    toggleDeg.classList.add('active');
+                    possibleAngles = ["0", "π/6", "π/4", "π/3", "π/2", "2π/3", "3π/4", "5π/6", "π"];
+                    correctSineAnswers = ["0", "1/2", "r2/2", "r3/2", "1", "r3/2", "r2/2", "1/2", "0"];
+                    correctCosineAnswers = ["1", "r3/2", "r2/2", "1/2", "0", "-1/2", "-r2/2", "-r3/2", "-1"];
+                    image.src = 'half_unit_circle_rad.svg';
+                }
+                else{
+                    toggleRad.classList.add('active');
+                    toggleDeg.classList.remove('active');
+                    possibleAngles = ['0°', '30°', '45°', '60°', '90°', '120°', '135°', '150°', '180°'];
+                    correctSineAnswers = ["0", "1/2", "r2/2", "r3/2", "1", "r3/2", "r2/2", "1/2", "0"];
+                    correctCosineAnswers = ["1", "r3/2", "r2/2", "1/2", "0", "-1/2", "-r2/2", "-r3/2", "-1"];
+                    image.src = 'half_unit_circle_black.svg';
+                }
+            }
+            else {
+                if (toggleRad.classList.contains('active')) {
+                    toggleRad.classList.remove('active');
+                    toggleDeg.classList.add('active');
+                    possibleAngles = ["0", "π/6", "π/4", "π/3", "π/2", "2π/3", "3π/4", "5π/6", "π", "7π/6", "5π/4", "4π/3", "3π/2", "5π/3", "7π/4", "11π/6"];
+                    correctSineAnswers = ["0", "1/2", "r2/2", "r3/2", "1", "r3/2", "r2/2", "1/2", "0"];
+                    correctCosineAnswers = ["1", "r3/2", "r2/2", "1/2", "0", "-1/2", "-r2/2", "-r3/2", "-1"];
+                    image.src = 'full_unit_circle_rad.svg';
+                }
+                else{
+                    toggleRad.classList.add('active');
+                    toggleDeg.classList.remove('active');
+                    possibleAngles = ['0°', '30°', '45°', '60°', '90°', '120°', '135°', '150°', '180°', '210°', '225°', '240°', '270°', '300°', '315°', '330°'];
+                    correctSineAnswers = ["0", "1/2", "r2/2", "r3/2", "1", "r3/2", "r2/2", "1/2", "0", "-1/2", "-r2/2", "-r3/2", "-1", "-r3/2", "-r2/2", "-1/2"];
+                    correctCosineAnswers = ["1", "r3/2", "r2/2", "1/2", "0", "-1/2", "-r2/2", "-r3/2", "-1", "-r3/2", "-r2/2", "-1/2", "0", "1/2", "r2/2", "r3/2"];
+                    image.src = 'full_unit_circle_black.svg';
+                }
+            }
+            generateQuestion();
+
+        }
+
     </script>
 </body>
 </html>
