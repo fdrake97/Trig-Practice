@@ -7,31 +7,52 @@
     <title>Trig Practice</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            display: flex;
+            /*font-family: Arial, sans-serif;
             text-align: center;
-            margin: 50px;
-            background-color: #1f1f1f;
+            margin: 50px;*/
+            background-color: #000;
+            /* Black background for the page */
+            display: flex;
+            align-items: center;
+            justify-content: center;
             color: #fff;
 
+        }
+
+        .container {
+            background-color: #000;
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            text-align: center;
+            align-content: center;
+            justify-content: center;
+        }
+
+        .last {
+            flex-basis: 100%;
         }
 
         .info-container {
             max-width: 600px;
             margin: 0 auto;
             text-align: left;
+            display: block;
         }
 
         #options {
+            background-color: #000;
             display: none;
         }
 
         #app-container {
             display: none;
+            flex-wrap: wrap;
         }
 
         h1,
         p,
+
 
         button {
             color: #fff;
@@ -40,6 +61,7 @@
         button {
             background-color: #61dafb;
             color: #282c35;
+            margin: 10px;
             padding: 10px 15px;
             border: none;
             cursor: pointer;
@@ -56,7 +78,7 @@
             padding: 10px;
             border: 1px solid #fff;
             border-radius: 5px;
-            display: inline-block;
+            /*display: inline-block;
             /* Set display to inline-block to shrink-wrap the content */
             width: 300px;
         }
@@ -66,7 +88,7 @@
         }
 
         #userAnswer {
-            background-color: #1f1f1f;
+            background-color: #000;
             color: #fff;
             padding: 10px;
             margin-bottom: 10px;
@@ -99,18 +121,6 @@
             /* Adjust the margin to position the image below the buttons */
         }
 
-        #toggle180.active,
-        #toggle360.active,
-        #toggleRad.active,
-        #toggleDeg.active {
-            background-color: #1f1f1f;
-            color: #fff;
-            border: 2px solid #61dafb;
-            padding: 8px 13px;
-            /* Adjust the padding to compensate for the border */
-        }
-
-
         /* Styles for the toggle switch */
         .toggle-container {
             position: relative;
@@ -126,7 +136,7 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background-color: #1f1f1f;
+            background-color: #000;
             /* Black background for the slider */
             border: 2px solid #61dafb;
             /* Blue border color */
@@ -161,19 +171,23 @@
         /* Styles for the text labels */
         .label {
             padding: 5px 10px;
-            /*margin-top: 5px;*/
+            /*margin-top: 10px;*/
             color: #fff;
+            background-color: #000;
             /* Blue color for labels */
             font-family: 'Arial', sans-serif;
             /* Set font to Arial sans-serif */
-            margin: 0 5px;
+            /*margin: 0 5px;
             /* Added margin for spacing */
+            align-content: center;
+            border-radius: 4px;
+            /*flex: 100%;*/
         }
     </style>
 </head>
 
 <body>
-    <div class="info-container">
+    <div id = "info" class="info-container">
         <h1>Instructions</h1>
         <p>
             To input non-integer answers, use the following format:
@@ -202,55 +216,86 @@
 
     <div id="options">
         <h1>Options</h1>
-        <span class="label" id="text-div">0° to 180°</span>
+        <span class="label">0° to 180°</span>
         <label class="toggle-container">
             <input type="checkbox" class="toggle-input" id="Range">
             <span class="toggle-slider"></span>
         </label>
-        <span class="label" id="text-div">0° to 360°</span>
-        <br>
-        <span class="label" id="text-div">degrees</span>
+        <span class="label">0° to 360°</span>
+        <div class="break"></div>
+        <span class="label">degrees</span>
         <label class="toggle-container">
             <input type="checkbox" class="toggle-input" id="DegVsRad">
             <span class="toggle-slider"></span>
         </label>
-        <span class="label" id="text-div">radians</span>
-        <br>
-        <span class="label" id="text-div">Hide circle</span>
+        <span class="label">radians</span>
+        <div class="break"></div>
+        <span class="label">Hide circle</span>
         <label class="toggle-container">
             <input type="checkbox" class="toggle-input" id="ShowCirc">
             <span class="toggle-slider"></span>
         </label>
-        <br>
-        <span class="label" id="text-div">Hide coordinates</span>
+        <div class="break"></div>
+        <span class="label">Hide coordinates</span>
         <label class="toggle-container">
             <input type="checkbox" class="toggle-input" id="ShowCoord">
             <span class="toggle-slider"></span>
         </label>
-        <br>
+        <div class="break"></div>
         <button onclick="startPractice()">Start</button>
     </div>
 
 
     <div id="app-container">
-        <div id="question-answer-container">
-            <div id="question-container"></div>
-            <form onsubmit="checkAnswer(); return false;">
-                <input type="text" id="userAnswer" placeholder="Your answer" autocomplete="off" autofocus>
-            </form>
+        <div class="last container">
+            <div id="question-answer-container">
+                <div id="question-container"></div>
+                <form onsubmit="checkAnswer(); return false;">
+                    <input type="text" id="userAnswer" placeholder="Your answer" autocomplete="off" autofocus>
+                </form>
+            </div>
         </div>
-        <p id="result"></p>
-        <p id="avgTime">Average Time Per Question: <span id="avgTimeValue">0.0</span> seconds</p>
-        <p>Current Streak: <span id="currentStreak">0</span></p>
-        <p>Highest Streak: <span id="highestStreak">0</span></p>
-        <button onclick="resetCounters()">Reset</button>
-        <button onclick="showInstructions()">Instructions</button>
-        <button onclick="showOptions()">Options</button>
-        <br>
+        <div class="last container">
+            <span class="label" id="result"></span>
+        </div>
+        <div class="last container">
+            <span class="label" id="avgTime">Average Time Per Question: <span id="avgTimeValue">0.0</span>
+                seconds</span>
+        </div>
+        <div class="last container">
+            <span class="label">Current Streak: <span id="currentStreak">0</span></span>
+        </div>
+        <div class="last container">
+            <span class="label">Highest Streak: <span id="highestStreak">0</span></span>
+        </div>
+        <div class="last container">
+            <button onclick="resetCounters()">Reset</button>
+            <button onclick="showInstructions()">Instructions</button>
+            <button onclick="showOptions()">Options</button>
+        </div>
         <div id="svg-container">
             <img id="vectorImage" src="half_unit_circle_black.svg" alt="Half Unit Circle" />
         </div>
         <script type="text/javascript">
+            let range_check = document.getElementById('Range');
+            let deg_check = document.getElementById('DegVsRad');
+            let circle_check = document.getElementById('ShowCirc');
+            let coord_check = document.getElementById('ShowCoord');
+
+            range_check.addEventListener('change', function () {
+                changeAnswers();
+            })
+            deg_check.addEventListener('change', function () {
+                changeAnswers();
+            })
+            circle_check.addEventListener('change', function () {
+                toggleImage()
+            })
+            coord_check.addEventListener('change', function () {
+                changeAnswers();
+            })
+
+
             function changeAnswers() {
                 let image = document.getElementById('vectorImage');
                 if (!deg_check.checked) {
@@ -297,48 +342,36 @@
             }
 
 
-            let range_check = document.getElementById('Range');
-            let deg_check = document.getElementById('DegVsRad');
-            let circle_check = document.getElementById('ShowCirc');
-            let coord_check = document.getElementById('ShowCoord');
+            function generateQuestion() {
+                var randomAngle = possibleAngles[Math.floor(Math.random() * possibleAngles.length)];
+                var isSine = Math.random() < 0.5;
+
+                var questionText = isSine ? "sin" : "cos";
+                questionText += "(" + randomAngle + ")";
+
+                document.getElementById("question-container").innerHTML = "<span class='label'>" + questionText + "</span>";
+
+                // Set the correct answers for each specific question
+                window.currentQuestion = {
+                    isSine: isSine,
+                    angle: randomAngle
+                };
+
+                // Clear the result text
+                document.getElementById("result").innerHTML = "";
+
+                // Record the time when the question is displayed
+                lastQuestionTime = new Date().getTime();
+            }
+
             Window.onload = changeAnswers();
             Window.onload = toggleImage();
+            Window.onload = startPractice();
         </script>
     </div>
 </body>
 
 <script>
-
-
-    range_check.addEventListener('change', function () {
-        changeAnswers();
-    })
-    deg_check.addEventListener('change', function () {
-        changeAnswers();
-    })
-    circle_check.addEventListener('change', function () {
-        toggleImage()
-    })
-    coord_check.addEventListener('change', function () {
-        changeAnswers();
-    })
-
-
-
-
-
-
-    function startPractice() {
-
-        document.querySelector('.info-container').style.display = 'none';
-        document.getElementById('options').style.display = 'none';
-        document.getElementById('app-container').style.display = 'block';
-        generateQuestion(); // Start the app by generating the first question
-
-        // Set focus on the answer box
-        document.getElementById('userAnswer').focus();
-    }
-
     var currentStreak = 0; // Counter for current streak
     var highestStreak = 0; // Counter for highest streak
     var timerActive = false;
@@ -346,31 +379,6 @@
     var lastQuestionTime;
     var totalCorrectAnswers = 0;
     var totalElapsedTime = 0;
-
-    // Function to generate a random question
-    function generateQuestion() {
-        var randomAngle = possibleAngles[Math.floor(Math.random() * possibleAngles.length)];
-        var isSine = Math.random() < 0.5;
-
-        var questionText = isSine ? "sin" : "cos";
-        questionText += "(" + randomAngle + ")";
-
-        document.getElementById("question-container").innerHTML = "<p>" + questionText + "</p>";
-
-        // Set the correct answers for each specific question
-        window.currentQuestion = {
-            isSine: isSine,
-            angle: randomAngle
-        };
-
-        // Clear the result text
-        document.getElementById("result").innerHTML = "";
-
-        // Record the time when the question is displayed
-        lastQuestionTime = new Date().getTime();
-    }
-
-    // Arrays for possible angles, correct sine answers, and correct cosine answers
     var possibleAngles = ['0°', '30°', '45°', '60°', '90°', '120°', '135°', '150°', '180°'];
     var correctSineAnswers = ["0", "1/2", "r2/2", "r3/2", "1", "r3/2", "r2/2", "1/2", "0"];
     var correctCosineAnswers = ["1", "r3/2", "r2/2", "1/2", "0", "-1/2", "-r2/2", "-r3/2", "-1"];
@@ -411,7 +419,7 @@
                 document.getElementById("currentStreak").innerText = currentStreak;
             }
         } else {
-            document.getElementByIsd("result").innerHTML = "Please enter a valid answer option.";
+            document.getElementById("result").innerHTML = "Please enter a valid answer option.";
         }
 
         document.getElementById("userAnswer").value = "";
@@ -456,12 +464,22 @@
     // Function to show instructions (take user back to the intro page)
     function showInstructions() {
         document.getElementById('app-container').style.display = 'none';
-        document.querySelector('.info-container').style.display = 'block';
+        document.getElementById('info').style.display = 'block';
     }
 
     function showOptions() {
         document.getElementById('app-container').style.display = 'none';
-        document.getElementById('options').style.display = 'block';
+        document.getElementById('options').style.display = 'flex';
+    }
+
+    function startPractice() {
+        document.getElementById('info').style.display = 'none';
+        document.getElementById('options').style.display = 'none';
+        document.getElementById('app-container').style.display = 'flex';
+        generateQuestion(); // Start the app by generating the first question
+
+        // Set focus on the answer box
+        document.getElementById('userAnswer').focus();
     }
 
 </script>
