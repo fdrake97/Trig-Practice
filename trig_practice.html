@@ -8,10 +8,12 @@
     <style>
         body {
             font-family: Arial, sans-serif;
+            display: flex;
             text-align: center;
             margin: 50px;
-            background-color: #000;
+            background-color: #1f1f1f;
             color: #fff;
+            
         }
 
         .info-container {
@@ -30,6 +32,7 @@
 
         h1,
         p,
+
         button {
             color: #fff;
         }
@@ -63,7 +66,7 @@
         }
 
         #userAnswer {
-            background-color: #000;
+            background-color: #1f1f1f;
             color: #fff;
             padding: 10px;
             margin-bottom: 10px;
@@ -100,7 +103,7 @@
         #toggle360.active,
         #toggleRad.active,
         #toggleDeg.active {
-            background-color: #000;
+            background-color: #1f1f1f;
             color: #fff;
             border: 2px solid #61dafb;
             padding: 8px 13px;
@@ -108,113 +111,63 @@
         }
 
 
-
-        .switch {
+        /* Styles for the toggle switch */
+        .toggle-container {
             position: relative;
             display: inline-block;
             width: 60px;
-            height: 34px;
+            height: 30px;
         }
 
-        .switch input {
-            opacity: 0;
-            width: 0;
-            height: 0;
-        }
-
-        .slider {
+        .toggle-slider {
             position: absolute;
             cursor: pointer;
             top: 0;
             left: 0;
             right: 0;
             bottom: 0;
-            background-color: #ccc;
-            -webkit-transition: .4s;
-            transition: .4s;
+            background-color: #1f1f1f;
+            /* Black background for the slider */
+            border: 2px solid #61dafb;
+            /* Blue border color */
+            border-radius: 15px;
+            /* Round corners */
+            transition: 0.4s;
         }
 
-        .slider:before {
+        .toggle-input {
+            display: none;
+        }
+
+        .toggle-slider:before {
             position: absolute;
             content: "";
-            height: 26px;
-            width: 26px;
-            left: 4px;
-            bottom: 4px;
-            background-color: white;
-            -webkit-transition: .4s;
-            transition: .4s;
-        }
-
-        input:checked+.slider {
-            background-color: #2196F3;
-        }
-
-        input:focus+.slider {
-            box-shadow: 0 0 1px #2196F3;
-        }
-
-        input:checked+.slider:before {
-            -webkit-transform: translateX(26px);
-            -ms-transform: translateX(26px);
-            transform: translateX(26px);
-        }
-
-        /* Rounded sliders */
-        .slider.round {
-            border-radius: 34px;
-        }
-
-        .slider.round:before {
+            height: 22px;
+            width: 22px;
+            left: 2px;
+            bottom: 2px;
+            background-color: #61dafb;
+            /* White slider color */
             border-radius: 50%;
+            /* Round slider */
+            transition: 0.4s;
         }
 
-
-
-
-
-        .sliderCC {
-            position: absolute;
-            cursor: pointer;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: #ccc;
-            -webkit-transition: .4s;
-            transition: .4s;
+        .toggle-input:checked+.toggle-slider:before {
+            transform: translateX(30px);
+            /* Move the slider to the right when checked */
         }
 
-        .sliderCC:before {
-            position: absolute;
-            content: "";
-            height: 26px;
-            width: 26px;
-            left: 4px;
-            bottom: 4px;
-            background-color: white;
-            -webkit-transition: .4s;
-            transition: .4s;
-        }
-
-
-        input:focus+.sliderCC {
-            box-shadow: 0 0 1px #2196F3;
-        }
-
-        input:checked+.sliderCC:before {
-            -webkit-transform: translateX(26px);
-            -ms-transform: translateX(26px);
-            transform: translateX(26px);
-        }
-
-        /* Rounded sliders */
-        .sliderCC.round {
-            border-radius: 34px;
-        }
-
-        .sliderCC.round:before {
-            border-radius: 50%;
+        /* Styles for the text labels */
+        .label {
+            padding: 5px 10px;
+            /*margin-top: 5px;*/
+            color: #fff;
+            /* Blue color for labels */
+            font-family: 'Arial', sans-serif;
+            /* Set font to Arial sans-serif */
+            margin: 0 5px;
+            /* Added margin for spacing */
         }
     </style>
 </head>
@@ -249,30 +202,30 @@
 
     <div id="options">
         <h1>Options</h1>
-        <text>0° to 180°</text>
-        <label class="switch">
-            <input type="checkbox" id="Range">
-            <span class="sliderCC round"></span>
+        <span class="label" id = "text-div">0° to 180°</span>
+        <label class="toggle-container">
+            <input type="checkbox" class="toggle-input" id="Range">
+            <span class="toggle-slider"></span>
         </label>
-        <text>0° to 360°</text>
+        <span class="label" id = "text-div">0° to 360°</span>
         <br>
-        <text>degrees</text>
-        <label class="switch">
-            <input type="checkbox" id="DegVsRad">
-            <span class="sliderCC round"></span>
+        <span class="label" id = "text-div">degrees</span>
+        <label class="toggle-container">
+            <input type="checkbox" class="toggle-input" id="DegVsRad">
+            <span class="toggle-slider"></span>
         </label>
-        <text>radians</text>
+        <span class="label" id = "text-div">radians</span>
         <br>
-        <text>Hide circle</text>
-        <label class="switch">
-            <input type="checkbox" id="ShowCirc">
-            <span class="slider round"></span>
+        <span class="label" id = "text-div">Hide circle</span>
+        <label class="toggle-container">
+            <input type="checkbox" class="toggle-input" id="ShowCirc">
+            <span class="toggle-slider"></span>
         </label>
         <br>
-        <text>Hide coordinates</text>
-        <label class="switch">
-            <input type="checkbox" id="ShowCoord">
-            <span class="slider round"></span>
+        <span class="label" id = "text-div">Hide coordinates</span>
+        <label class="toggle-container">
+            <input type="checkbox" class="toggle-input" id="ShowCoord">
+            <span class="toggle-slider"></span>
         </label>
         <br>
         <button onclick="startPractice()">Start</button>
@@ -305,7 +258,7 @@
     let range_check = document.getElementById('Range');
     let deg_check = document.getElementById('DegVsRad');
     let circle_check = document.getElementById('ShowCirc');
-    let coord_check = document.getElementById('ShowCoord')
+    let coord_check = document.getElementById('ShowCoord');
     range_check.addEventListener('change', function () {
         changeAnswers(range_check.checked, deg_check.checked, coord_check.checked);
     })

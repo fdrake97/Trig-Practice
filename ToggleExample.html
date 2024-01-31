@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        /* Styles for the page */
+        body {
+            background-color: #1f1f1f;
+            /* Black background for the page */
+            display: flex;
+        }
+
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+
+        .break {
+            flex-basis: 100%;
+            height: 0;
+        }
+
+        /* Styles for the toggle switch */
+        .toggle-container {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 30px;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #000;
+            /* Black background for the slider */
+            border: 2px solid #61dafb;
+            /* Blue border color */
+            border-radius: 15px;
+            /* Round corners */
+            transition: 0.4s;
+        }
+
+        .toggle-input {
+            display: none;
+        }
+
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 22px;
+            width: 22px;
+            left: 2px;
+            bottom: 2px;
+            background-color: #61dafb;
+            /* White slider color */
+            border-radius: 50%;
+            /* Round slider */
+            transition: 0.4s;
+        }
+
+        .toggle-input:checked+.toggle-slider:before {
+            transform: translateX(30px);
+            /* Move the slider to the right when checked */
+        }
+
+        /* Styles for the text labels */
+        .label {
+            padding: 5px 10px;
+            /*margin-top: 10px;*/
+            color: #fff;
+            /*background-color: #12dd7b;
+            /* Blue color for labels */
+            font-family: 'Arial', sans-serif;
+            /* Set font to Arial sans-serif */
+            /*margin: 0 5px;
+            /* Added margin for spacing */
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <span class="label">Left</span>
+
+        <label class="toggle-container">
+            <input type="checkbox" class="toggle-input" id=toggle1>
+            <span class="toggle-slider"></span>
+        </label>
+
+        <span class="label">Right</span>
+
+        <div class="break"></div>
+
+        <span class="label" id="text-div">Hmmm... this is broken</span>
+
+
+        <script type="text/javascript">
+            let check_toggle = document.getElementById('toggle1');
+            function toggle1handle() {
+                if (check_toggle.checked) { document.getElementById('text-div').innerText = "You selected Right"; }
+                else { document.getElementById('text-div').innerText = "You selected Left"; }
+            }
+            Window.onload = toggle1handle();
+        </script>
+    </div>
+</body>
+<script>
+    check_toggle.addEventListener('change', function () { toggle1handle() })
+</script>
+
+</html>
