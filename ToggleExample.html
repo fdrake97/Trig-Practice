@@ -38,7 +38,7 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background-color: #000;
+            background-color: #1f1f1f;
             /* Black background for the slider */
             border: 2px solid #61dafb;
             /* Blue border color */
@@ -102,9 +102,8 @@
 
 
         <script type="text/javascript">
-            let check_toggle = document.getElementById('toggle1');
             function toggle1handle() {
-                if (check_toggle.checked) { document.getElementById('text-div').innerText = "You selected Right"; }
+                if (document.getElementById('toggle1').checked) { document.getElementById('text-div').innerText = "You selected Right"; }
                 else { document.getElementById('text-div').innerText = "You selected Left"; }
             }
             Window.onload = toggle1handle();
@@ -112,7 +111,7 @@
     </div>
 </body>
 <script>
-    check_toggle.addEventListener('change', function () { toggle1handle() })
+    document.getElementById('toggle1').addEventListener('change', function () { toggle1handle() })
 </script>
 
 </html>
