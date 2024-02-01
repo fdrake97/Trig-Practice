@@ -24,8 +24,8 @@
             display: flex;
             align-items: center;
             flex-wrap: wrap;
-            text-align: center;
-            align-content: center;
+            text-align: left;
+            align-content: left;
             justify-content: center;
             padding: 5px;
         }
@@ -77,6 +77,8 @@
             /*display: inline-block;
             /* Set display to inline-block to shrink-wrap the content */
             width: 300px;
+            text-align: center;
+            align-content: center;
         }
 
         #question-container {
@@ -147,6 +149,11 @@
             transition: 0.4s;
         }
 
+        input:checked+.toggle-slider {
+            background-color: #02555d;
+        }
+
+
         .toggle-input:checked+.toggle-slider:before {
             transform: translateX(30px);
             /* Move the slider to the right when checked */
@@ -172,9 +179,23 @@
             height: 0px;
             flex-basis: 100%;
         }
+
+        .text {
+            padding: 10px;
+            color: #fff;
+            background-color: #000;
+            align-content: left;
+            border-radius: 4px;
+        }
     </style>
 </head>
 <script>
+    const deg180 = ['0°', '30°', '45°', '60°', '90°', '120°', '135°', '150°', '180°'];
+    const deg360 = ['210°', '225°', '240°', '270°', '300°', '315°', '330°'];
+    const rad180 = ["0", "π/6", "π/4", "π/3", "π/2", "2π/3", "3π/4", "5π/6", "π"];
+    const rad360 = ["7π/6", "5π/4", "4π/3", "3π/2", "5π/3", "7π/4", "11π/6"];
+    const sinAns = ["0", "1/2", "r2/2", "r3/2", "1", "r3/2", "r2/2", "1/2", "0", "-1/2", "-r2/2", "-r3/2", "-1", "-r3/2", "-r2/2", "-1/2"];
+    const cosAns = ["1", "r3/2", "r2/2", "1/2", "0", "-1/2", "-r2/2", "-r3/2", "-1", "-r3/2", "-r2/2", "-1/2", "0", "1/2", "r2/2", "r3/2"];
     var currentStreak = 0; // Counter for current streak
     var highestStreak = 0; // Counter for highest streak
     var timerActive = false;
@@ -182,49 +203,55 @@
     var lastQuestionTime;
     var totalCorrectAnswers = 0;
     var totalElapsedTime = 0;
+    var questionIndex;
     var possibleAngles = ['0°', '30°', '45°', '60°', '90°', '120°', '135°', '150°', '180°'];
     var correctSineAnswers = ["0", "1/2", "r2/2", "r3/2", "1", "r3/2", "r2/2", "1/2", "0"];
     var correctCosineAnswers = ["1", "r3/2", "r2/2", "1/2", "0", "-1/2", "-r2/2", "-r3/2", "-1"];
     function changeAnswers() {
-        let image = document.getElementById('unitCircle');
-        if (!document.getElementById('DegVsRad').checked) {
-            if (document.getElementById('Range').checked) {
-                possibleAngles = ['0°', '30°', '45°', '60°', '90°', '120°', '135°', '150°', '180°', '210°', '225°', '240°', '270°', '300°', '315°', '330°'];
-                correctSineAnswers = ["0", "1/2", "r2/2", "r3/2", "1", "r3/2", "r2/2", "1/2", "0", "-1/2", "-r2/2", "-r3/2", "-1", "-r3/2", "-r2/2", "-1/2"];
-                correctCosineAnswers = ["1", "r3/2", "r2/2", "1/2", "0", "-1/2", "-r2/2", "-r3/2", "-1", "-r3/2", "-r2/2", "-1/2", "0", "1/2", "r2/2", "r3/2"];
-                if (document.getElementById('ShowCoord').checked) { image.src = 'full_unit_circle_black_no_coords.svg'; }
-                else { image.src = 'full_unit_circle_black.svg'; }
-            } else {
-                possibleAngles = ['0°', '30°', '45°', '60°', '90°', '120°', '135°', '150°', '180°'];
-                correctSineAnswers = ["0", "1/2", "r2/2", "r3/2", "1", "r3/2", "r2/2", "1/2", "0"];
-                correctCosineAnswers = ["1", "r3/2", "r2/2", "1/2", "0", "-1/2", "-r2/2", "-r3/2", "-1"];
-                if (document.getElementById('ShowCoord').checked) { image.src = 'half_unit_circle_black_no_coords.svg'; }
-                else { image.src = 'half_unit_circle_black.svg'; }
+        possibleAngles = [];
+        correctSineAnswers = sinAns;
+        correctCosineAnswers = cosAns;
+        if (document.getElementById('degree_toggle').checked) {
+            possibleAngles.push(...deg180);
+            if (document.getElementById('full_circle_toggle').checked) {
+                possibleAngles.push(...deg360);
             }
         }
-        else {
-            if (document.getElementById('Range').checked) {
-                possibleAngles = ["0", "π/6", "π/4", "π/3", "π/2", "2π/3", "3π/4", "5π/6", "π", "7π/6", "5π/4", "4π/3", "3π/2", "5π/3", "7π/4", "11π/6"];
-                correctSineAnswers = ["0", "1/2", "r2/2", "r3/2", "1", "r3/2", "r2/2", "1/2", "0", "-1/2", "-r2/2", "-r3/2", "-1", "-r3/2", "-r2/2", "-1/2"];
-                correctCosineAnswers = ["1", "r3/2", "r2/2", "1/2", "0", "-1/2", "-r2/2", "-r3/2", "-1", "-r3/2", "-r2/2", "-1/2", "0", "1/2", "r2/2", "r3/2"];
-                if (document.getElementById('ShowCoord').checked) { image.src = 'full_unit_circle_rad_no_coords.svg'; }
-                else { image.src = 'full_unit_circle_rad.svg'; }
-            } else {
-                possibleAngles = ["0", "π/6", "π/4", "π/3", "π/2", "2π/3", "3π/4", "5π/6", "π"];
-                correctSineAnswers = ["0", "1/2", "r2/2", "r3/2", "1", "r3/2", "r2/2", "1/2", "0"];
-                correctCosineAnswers = ["1", "r3/2", "r2/2", "1/2", "0", "-1/2", "-r2/2", "-r3/2", "-1"];
-                if (document.getElementById('ShowCoord').checked) { image.src = 'half_unit_circle_rad_no_coords.svg'; }
-                else { image.src = 'half_unit_circle_rad.svg'; }
+        if (document.getElementById('radian_toggle').checked) {
+            possibleAngles.push(...rad180);
+            if (document.getElementById('full_circle_toggle').checked) {
+                possibleAngles.push(...rad360);
             }
         }
+
         generateQuestion();
-        updateImage();
     }
 
     function updateImage() {
         var image = document.getElementById('unitCircle');
+        console.log(questionIndex)
+        ///questionIndex<9&&
+        if (document.getElementById('full_circle_toggle').checked) {
+            if (document.getElementById('radian_toggle').checked&&questionIndex<16) {
+                if (document.getElementById('coordinate_toggle').checked) { image.src = 'full_unit_circle_black_no_coords.svg'; }
+                else { image.src = 'full_unit_circle_black.svg'; }
+            } else {
+                if (document.getElementById('coordinate_toggle').checked) { image.src = 'full_unit_circle_rad_no_coords.svg'; }
+                else { image.src = 'full_unit_circle_rad.svg'; }
+                
+            }
+        }
+        else {
+            if (document.getElementById('radian_toggle').checked&&questionIndex<9) {
+                if (document.getElementById('coordinate_toggle').checked) { image.src = 'half_unit_circle_black_no_coords.svg'; }
+                else { image.src = 'half_unit_circle_black.svg'; }
+            } else {
+                if (document.getElementById('coordinate_toggle').checked) { image.src = 'half_unit_circle_rad_no_coords.svg'; }
+                else { image.src = 'half_unit_circle_rad.svg'; }
+            }
+        }
 
-        if (!document.getElementById('ShowCirc').checked) {
+        if (!document.getElementById('circle_toggle').checked) {
             image.style.visibility = 'visible';
         } else {
             image.style.visibility = 'hidden';
@@ -233,7 +260,8 @@
 
 
     function generateQuestion() {
-        var randomAngle = possibleAngles[Math.floor(Math.random() * possibleAngles.length)];
+        questionIndex = Math.floor(Math.random() * possibleAngles.length);
+        var randomAngle = possibleAngles[questionIndex];
         var isSine = Math.random() < 0.5;
 
         var questionText = isSine ? "sin" : "cos";
@@ -252,6 +280,8 @@
 
         // Record the time when the question is displayed
         lastQuestionTime = new Date().getTime();
+
+        updateImage();
     }
     // Function to check the user's answer
     function checkAnswer() {
@@ -328,7 +358,8 @@
 
         generateQuestion(); // Ask a new question after reset
         document.getElementById('userAnswer').focus();
-
+    
+        changeAnswers();
     }
 
     // Function to show instructions (take user back to the intro page)
@@ -346,7 +377,6 @@
         document.getElementById('info').style.display = 'none';
         document.getElementById('options').style.display = 'none';
         document.getElementById('app-container').style.display = 'flex';
-        generateQuestion(); // Start the app by generating the first question
         changeAnswers()
 
         // Set focus on the answer box
@@ -391,36 +421,55 @@
             <h1>Options</h1>
         </div>
         <div class="last container">
-            <span class="label">0° to 180°</span>
-            <label class="toggle-container">
-                <input type="checkbox" class="toggle-input" id="Range">
-                <span class="toggle-slider"></span>
-            </label>
-            <span class="label">0° to 360°</span>
-        </div>
-        <div class="last container">
-            <span class="label">Degrees</span>
-            <label class="toggle-container">
-                <input type="checkbox" class="toggle-input" id="DegVsRad">
-                <span class="toggle-slider"></span>
-            </label>
-            <span class="label">Radians</span>
-        </div>
-        <div class="last container">
-            <span class="label">Show circle</span>
-            <label class="toggle-container">
-                <input type="checkbox" class="toggle-input" id="ShowCirc">
-                <span class="toggle-slider"></span>
-            </label>
-            <span class="label">Hide circle</span>
-        </div>
-        <div class="last container">
-            <span class="label">Show coordinates</span>
-            <label class="toggle-container">
-                <input type="checkbox" class="toggle-input" id="ShowCoord">
-                <span class="toggle-slider"></span>
-            </label>
-            <span class="label">Hide coordinates</span>
+            <div class="container">
+                <div class="last text">
+                    Full circle
+                </div>
+                <div class="last text">
+                    Degrees
+                </div>
+                <div class="last text">
+                    Radians
+                </div>
+                <div class="last text">
+                    Hide circle
+                </div>
+                <div class="last text">
+                    Hide coordinates
+                </div>
+            </div>
+            <div class="container">
+                <div class="last container">
+                    <label class="toggle-container">
+                        <input type="checkbox" class="toggle-input" id="full_circle_toggle">
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+                <div class="last container">
+                    <label class="toggle-container">
+                        <input type="checkbox" class="toggle-input" id="degree_toggle">
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+                <div class="last container">
+                    <label class="toggle-container">
+                        <input type="checkbox" class="toggle-input" id="radian_toggle">
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+                <div class="last container">
+                    <label class="toggle-container">
+                        <input type="checkbox" class="toggle-input" id="circle_toggle">
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+                <div class="last container">
+                    <label class="toggle-container">
+                        <input type="checkbox" class="toggle-input" id="coordinate_toggle">
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+            </div>
         </div>
         <div class="last container">
             <button onclick="startPractice()">Start</button>
@@ -462,3 +511,17 @@
         </div>
     </div>
 </body>
+
+<script>
+    document.getElementById("degree_toggle").addEventListener('change', function () {
+        if (!document.getElementById("degree_toggle").checked) {
+            document.getElementById("radian_toggle").checked = true
+        }
+    })
+
+    document.getElementById("radian_toggle").addEventListener('change', function () {
+        if (!document.getElementById("radian_toggle").checked) {
+            document.getElementById("degree_toggle").checked = true
+        }
+    })
+</script>
