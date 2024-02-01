@@ -229,26 +229,27 @@
 
     function updateImage() {
         var image = document.getElementById('unitCircle');
-        if (document.getElementById('full_circle_toggle').checked) {
-            if (document.getElementById('degree_toggle').checked&&questionIndex<16) {
-                if (document.getElementById('coordinate_toggle').checked) { image.src = 'full_unit_circle_black_no_coords.svg'; }
-                else { image.src = 'full_unit_circle_black.svg'; }
-            } else {
-                if (document.getElementById('coordinate_toggle').checked) { image.src = 'full_unit_circle_rad_no_coords.svg'; }
-                else { image.src = 'full_unit_circle_rad.svg'; }
-                
-            }
-        }
-        else {
-            if (document.getElementById('degree_toggle').checked&&questionIndex<9) {
-                if (document.getElementById('coordinate_toggle').checked) { image.src = 'half_unit_circle_black_no_coords.svg'; }
-                else { image.src = 'half_unit_circle_black.svg'; }
-            } else {
-                if (document.getElementById('coordinate_toggle').checked) { image.src = 'half_unit_circle_rad_no_coords.svg'; }
-                else { image.src = 'half_unit_circle_rad.svg'; }
-            }
-        }
+        if (document.getElementById('degree_toggle').checked && document.getElementById('radian_toggle').checked) {
+            if (document.getElementById('full_circle_toggle').checked) {
+                if (document.getElementById('degree_toggle').checked && questionIndex < 16) {
+                    if (document.getElementById('coordinate_toggle').checked) { image.src = 'full_unit_circle_black_no_coords.svg'; }
+                    else { image.src = 'full_unit_circle_black.svg'; }
+                } else {
+                    if (document.getElementById('coordinate_toggle').checked) { image.src = 'full_unit_circle_rad_no_coords.svg'; }
+                    else { image.src = 'full_unit_circle_rad.svg'; }
 
+                }
+            }
+            else {
+                if (document.getElementById('degree_toggle').checked && questionIndex < 9) {
+                    if (document.getElementById('coordinate_toggle').checked) { image.src = 'half_unit_circle_black_no_coords.svg'; }
+                    else { image.src = 'half_unit_circle_black.svg'; }
+                } else {
+                    if (document.getElementById('coordinate_toggle').checked) { image.src = 'half_unit_circle_rad_no_coords.svg'; }
+                    else { image.src = 'half_unit_circle_rad.svg'; }
+                }
+            }
+        }
         if (!document.getElementById('circle_toggle').checked) {
             image.style.visibility = 'visible';
         } else {
@@ -356,7 +357,7 @@
 
         generateQuestion(); // Ask a new question after reset
         document.getElementById('userAnswer').focus();
-    
+
         changeAnswers();
     }
 
