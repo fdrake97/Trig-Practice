@@ -229,10 +229,8 @@
 
     function updateImage() {
         var image = document.getElementById('unitCircle');
-        console.log(questionIndex)
-        ///questionIndex<9&&
         if (document.getElementById('full_circle_toggle').checked) {
-            if (document.getElementById('radian_toggle').checked&&questionIndex<16) {
+            if (document.getElementById('degree_toggle').checked&&questionIndex<16) {
                 if (document.getElementById('coordinate_toggle').checked) { image.src = 'full_unit_circle_black_no_coords.svg'; }
                 else { image.src = 'full_unit_circle_black.svg'; }
             } else {
@@ -242,7 +240,7 @@
             }
         }
         else {
-            if (document.getElementById('radian_toggle').checked&&questionIndex<9) {
+            if (document.getElementById('degree_toggle').checked&&questionIndex<9) {
                 if (document.getElementById('coordinate_toggle').checked) { image.src = 'half_unit_circle_black_no_coords.svg'; }
                 else { image.src = 'half_unit_circle_black.svg'; }
             } else {
@@ -374,10 +372,10 @@
     }
 
     function startPractice() {
+        changeAnswers()
         document.getElementById('info').style.display = 'none';
         document.getElementById('options').style.display = 'none';
         document.getElementById('app-container').style.display = 'flex';
-        changeAnswers()
 
         // Set focus on the answer box
         document.getElementById('userAnswer').focus();
