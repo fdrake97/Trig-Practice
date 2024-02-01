@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trig Practice</title>
+    <style>
+        body {
+            /*font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 50px;*/
+            background-color: #000;
+            /* Black background for the page */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-family: monospace;
+        }
+
+        .container {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            text-align: center;
+            align-content: center;
+            justify-content: center;
+            padding: 5px;
+        }
+
+        .last {
+            flex-basis: 100%;
+        }
+
+        #info {
+            display: block;
+            flex-wrap: wrap;
+        }
+
+        #options,
+        #app-container {
+            display: none;
+            flex-wrap: wrap;
+            flex-basis: 100%;
+        }
+
+        h1,
+        p,
+
+
+        button {
+            color: #fff;
+        }
+
+        button {
+            background-color: #61dafb;
+            color: #282c35;
+            margin: 10px;
+            padding: 10px 15px;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background-color: #4fa3d1;
+        }
+
+        #question-answer-container {
+            margin-bottom: 20px;
+            padding: 10px;
+            border: 1px solid #fff;
+            border-radius: 5px;
+            /*display: inline-block;
+            /* Set display to inline-block to shrink-wrap the content */
+            width: 300px;
+        }
+
+        #question-container {
+            font-size: 24px;
+        }
+
+        #userAnswer {
+            background-color: #000;
+            color: #fff;
+            padding: 10px;
+            margin: 10px;
+        }
+
+        #unitCircleContainer {
+            width: 50%;
+            /* Set the image size to half of its original size */
+            height: auto;
+            /* Maintain aspect ratio */
+        }
+
+        #svg-container {
+            margin-top: 20px;
+            /* Adjust the margin to position the image below the buttons */
+        }
+
+        /* Styles for the toggle switch */
+        .toggle-container {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 30px;
+        }
+
+        .toggle-slider {
+            display: flex;
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #1f1f1f;
+            /* Black background for the slider */
+            border: 2px solid #61dafb;
+            /* Blue border color */
+            border-radius: 15px;
+            /* Round corners */
+            transition: 0.4s;
+        }
+
+        .toggle-input {
+            display: none;
+        }
+
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 22px;
+            width: 22px;
+            left: 2px;
+            bottom: 2px;
+            background-color: #61dafb;
+            /* White slider color */
+            border-radius: 50%;
+            /* Round slider */
+            transition: 0.4s;
+        }
+
+        .toggle-input:checked+.toggle-slider:before {
+            transform: translateX(30px);
+            /* Move the slider to the right when checked */
+        }
+
+        /* Styles for the text labels */
+        .label {
+            padding: 5px 10px;
+            /*margin-top: 10px;*/
+            color: #fff;
+            background-color: #000;
+            /* Blue color for labels 
+            font-family: 'Arial', sans-serif;
+            /* Set font to Arial sans-serif */
+            /*margin: 0 5px;
+            /* Added margin for spacing */
+            align-content: center;
+            border-radius: 4px;
+            /*flex: 100%;*/
+        }
+
+        .break {
+            height: 0px;
+            flex-basis: 100%;
+        }
+    </style>
+</head>
+<script>
+    var currentStreak = 0; // Counter for current streak
+    var highestStreak = 0; // Counter for highest streak
+    var timerActive = false;
+    var startTime;
+    var lastQuestionTime;
+    var totalCorrectAnswers = 0;
+    var totalElapsedTime = 0;
+    var possibleAngles = ['0°', '30°', '45°', '60°', '90°', '120°', '135°', '150°', '180°'];
+    var correctSineAnswers = ["0", "1/2", "r2/2", "r3/2", "1", "r3/2", "r2/2", "1/2", "0"];
+    var correctCosineAnswers = ["1", "r3/2", "r2/2", "1/2", "0", "-1/2", "-r2/2", "-r3/2", "-1"];
+    function changeAnswers() {
+        let image = document.getElementById('unitCircle');
+        if (!document.getElementById('DegVsRad').checked) {
+            if (document.getElementById('Range').checked) {
+                possibleAngles = ['0°', '30°', '45°', '60°', '90°', '120°', '135°', '150°', '180°', '210°', '225°', '240°', '270°', '300°', '315°', '330°'];
+                correctSineAnswers = ["0", "1/2", "r2/2", "r3/2", "1", "r3/2", "r2/2", "1/2", "0", "-1/2", "-r2/2", "-r3/2", "-1", "-r3/2", "-r2/2", "-1/2"];
+                correctCosineAnswers = ["1", "r3/2", "r2/2", "1/2", "0", "-1/2", "-r2/2", "-r3/2", "-1", "-r3/2", "-r2/2", "-1/2", "0", "1/2", "r2/2", "r3/2"];
+                if (document.getElementById('ShowCoord').checked) { image.src = 'full_unit_circle_black_no_coords.svg'; }
+                else { image.src = 'full_unit_circle_black.svg'; }
+            } else {
+                possibleAngles = ['0°', '30°', '45°', '60°', '90°', '120°', '135°', '150°', '180°'];
+                correctSineAnswers = ["0", "1/2", "r2/2", "r3/2", "1", "r3/2", "r2/2", "1/2", "0"];
+                correctCosineAnswers = ["1", "r3/2", "r2/2", "1/2", "0", "-1/2", "-r2/2", "-r3/2", "-1"];
+                if (document.getElementById('ShowCoord').checked) { image.src = 'half_unit_circle_black_no_coords.svg'; }
+                else { image.src = 'half_unit_circle_black.svg'; }
+            }
+        }
+        else {
+            if (document.getElementById('Range').checked) {
+                possibleAngles = ["0", "π/6", "π/4", "π/3", "π/2", "2π/3", "3π/4", "5π/6", "π", "7π/6", "5π/4", "4π/3", "3π/2", "5π/3", "7π/4", "11π/6"];
+                correctSineAnswers = ["0", "1/2", "r2/2", "r3/2", "1", "r3/2", "r2/2", "1/2", "0", "-1/2", "-r2/2", "-r3/2", "-1", "-r3/2", "-r2/2", "-1/2"];
+                correctCosineAnswers = ["1", "r3/2", "r2/2", "1/2", "0", "-1/2", "-r2/2", "-r3/2", "-1", "-r3/2", "-r2/2", "-1/2", "0", "1/2", "r2/2", "r3/2"];
+                if (document.getElementById('ShowCoord').checked) { image.src = 'full_unit_circle_rad_no_coords.svg'; }
+                else { image.src = 'full_unit_circle_rad.svg'; }
+            } else {
+                possibleAngles = ["0", "π/6", "π/4", "π/3", "π/2", "2π/3", "3π/4", "5π/6", "π"];
+                correctSineAnswers = ["0", "1/2", "r2/2", "r3/2", "1", "r3/2", "r2/2", "1/2", "0"];
+                correctCosineAnswers = ["1", "r3/2", "r2/2", "1/2", "0", "-1/2", "-r2/2", "-r3/2", "-1"];
+                if (document.getElementById('ShowCoord').checked) { image.src = 'half_unit_circle_rad_no_coords.svg'; }
+                else { image.src = 'half_unit_circle_rad.svg'; }
+            }
+        }
+        generateQuestion();
+        updateImage();
+    }
+
+    function updateImage() {
+        var image = document.getElementById('unitCircle');
+
+        if (!document.getElementById('ShowCirc').checked) {
+            image.style.visibility = 'visible';
+        } else {
+            image.style.visibility = 'hidden';
+        }
+    }
+
+
+    function generateQuestion() {
+        var randomAngle = possibleAngles[Math.floor(Math.random() * possibleAngles.length)];
+        var isSine = Math.random() < 0.5;
+
+        var questionText = isSine ? "sin" : "cos";
+        questionText += "(" + randomAngle + ")";
+
+        document.getElementById("question-container").innerHTML = "<span class='label'>" + questionText + "</span>";
+
+        // Set the correct answers for each specific question
+        window.currentQuestion = {
+            isSine: isSine,
+            angle: randomAngle
+        };
+
+        // Clear the result text
+        document.getElementById("result").innerHTML = "";
+
+        // Record the time when the question is displayed
+        lastQuestionTime = new Date().getTime();
+    }
+    // Function to check the user's answer
+    function checkAnswer() {
+        var userAnswer = document.getElementById("userAnswer").value.toLowerCase();
+
+        // Check if the user has entered something
+        if (userAnswer.trim() === "") {
+            return;  // Do nothing if the answer is empty
+        }
+
+        if (isAnswerOption(userAnswer)) {
+            var correctAnswer = getCorrectAnswer(currentQuestion.isSine, currentQuestion.angle);
+
+            if (userAnswer === correctAnswer) {
+                document.getElementById("result").innerHTML = "Correct! Well done!";
+                currentStreak++;
+                totalCorrectAnswers++;
+                document.getElementById("currentStreak").innerText = currentStreak;
+                if (currentStreak > highestStreak) {
+                    highestStreak = currentStreak;
+                    document.getElementById("highestStreak").innerText = highestStreak;
+                }
+
+                var currentTime = new Date().getTime();
+                var elapsedTime = (currentTime - lastQuestionTime) / 1000;
+                totalElapsedTime += elapsedTime;
+
+                var averageTime = totalCorrectAnswers > 0 ? (totalElapsedTime / totalCorrectAnswers).toFixed(1) : 0.0;
+                document.getElementById("avgTimeValue").innerText = averageTime;
+
+                generateQuestion();
+            } else {
+                document.getElementById("result").innerHTML = "Incorrect. Please try again.";
+                currentStreak = 0;
+                document.getElementById("currentStreak").innerText = currentStreak;
+            }
+        } else {
+            document.getElementById("result").innerHTML = "Please enter a valid answer option.";
+        }
+
+        document.getElementById("userAnswer").value = "";
+    }
+
+    // Function to check if the provided answer is one of the predefined options
+    function isAnswerOption(answer) {
+        var answerOptions = ["0", "1/2", "r2/2", "r3/2", "1", "-1/2", "-r2/2", "-r3/2", "-1"];
+        return answerOptions.includes(answer);
+    }
+
+    // Function to get the correct answer for a specific question
+    function getCorrectAnswer(isSine, angle) {
+        var index = possibleAngles.indexOf(angle);
+
+        if (isSine) {
+            return correctSineAnswers[index];
+        } else {
+            return correctCosineAnswers[index];
+        }
+    }
+
+    // Function to reset all counters and timers
+    function resetCounters() {
+        currentStreak = 0;
+        highestStreak = 0;
+        timerActive = false;
+        startTime = 0;
+        lastQuestionTime = 0;
+        totalCorrectAnswers = 0;
+        totalElapsedTime = 0;
+
+        document.getElementById("currentStreak").innerText = currentStreak;
+        document.getElementById("highestStreak").innerText = highestStreak;
+        document.getElementById("avgTimeValue").innerText = "0.0";
+
+        generateQuestion(); // Ask a new question after reset
+        document.getElementById('userAnswer').focus();
+
+    }
+
+    // Function to show instructions (take user back to the intro page)
+    function showInstructions() {
+        document.getElementById('app-container').style.display = 'none';
+        document.getElementById('info').style.display = 'block';
+    }
+
+    function showOptions() {
+        document.getElementById('app-container').style.display = 'none';
+        document.getElementById('options').style.display = 'flex';
+    }
+
+    function startPractice() {
+        document.getElementById('info').style.display = 'none';
+        document.getElementById('options').style.display = 'none';
+        document.getElementById('app-container').style.display = 'flex';
+        generateQuestion(); // Start the app by generating the first question
+        changeAnswers()
+
+        // Set focus on the answer box
+        document.getElementById('userAnswer').focus();
+    }
+
+</script>
+
+<body>
+    <div id="info">
+        <h1>Instructions</h1>
+        <div class="break"></div>
+        <p>
+            To input non-integer answers, use the following format:
+            <br>
+            - Fractions: x/y (e.g., 1/2, not 0.5)
+            <br>
+            - Square root: rx/y (e.g., r2/2 for the square root of 2 over 2)
+            <br><br>
+            The available answer options are:
+        </p>
+        <div class="break"></div>
+        <ul>
+            <li>0</li>
+            <li>1/2</li>
+            <li>r2/2</li>
+            <li>r3/2</li>
+            <li>1</li>
+            <li>-1/2</li>
+            <li>-r2/2</li>
+            <li>-r3/2</li>
+            <li>-1</li>
+        </ul>
+        <div class="last text">
+            <!-- Add a button for Practice mode -->
+            <button onclick="startPractice()">Practice</button>
+        </div>
+    </div>
+
+    <div id="options">
+        <div class="last container">
+            <h1>Options</h1>
+        </div>
+        <div class="last container">
+            <span class="label">0° to 180°</span>
+            <label class="toggle-container">
+                <input type="checkbox" class="toggle-input" id="Range">
+                <span class="toggle-slider"></span>
+            </label>
+            <span class="label">0° to 360°</span>
+        </div>
+        <div class="last container">
+            <span class="label">Degrees</span>
+            <label class="toggle-container">
+                <input type="checkbox" class="toggle-input" id="DegVsRad">
+                <span class="toggle-slider"></span>
+            </label>
+            <span class="label">Radians</span>
+        </div>
+        <div class="last container">
+            <span class="label">Show circle</span>
+            <label class="toggle-container">
+                <input type="checkbox" class="toggle-input" id="ShowCirc">
+                <span class="toggle-slider"></span>
+            </label>
+            <span class="label">Hide circle</span>
+        </div>
+        <div class="last container">
+            <span class="label">Show coordinates</span>
+            <label class="toggle-container">
+                <input type="checkbox" class="toggle-input" id="ShowCoord">
+                <span class="toggle-slider"></span>
+            </label>
+            <span class="label">Hide coordinates</span>
+        </div>
+        <div class="last container">
+            <button onclick="startPractice()">Start</button>
+        </div>
+    </div>
+
+
+    <div id="app-container">
+        <div class="last container">
+            <div id="question-answer-container">
+                <div id="question-container"></div>
+                <form onsubmit="checkAnswer(); return false;">
+                    <input type="text" id="userAnswer" placeholder="Your answer" autocomplete="off" autofocus>
+                </form>
+            </div>
+        </div>
+        <div class="last container">
+            <span class="label" id="result"></span>
+        </div>
+        <div class="last container">
+            <span class="label" id="avgTime">Average Time Per Question: <span id="avgTimeValue">0.0</span>
+                seconds</span>
+        </div>
+        <div class="last container">
+            <span class="label">Current Streak: <span id="currentStreak">0</span></span>
+        </div>
+        <div class="last container">
+            <span class="label">Highest Streak: <span id="highestStreak">0</span></span>
+        </div>
+        <div class="last container">
+            <button onclick="resetCounters()">Reset</button>
+            <button onclick="showInstructions()">Instructions</button>
+            <button onclick="showOptions()">Options</button>
+        </div>
+        <div class="last container">
+            <div id="unitCircleContainer" class="container">
+                <img id="unitCircle" src="half_unit_circle_black.svg" alt="unitCircle" />
+            </div>
+        </div>
+    </div>
+</body>
