@@ -306,7 +306,7 @@
 
     function submitName() {
         userName = document.getElementById("userName").value.toLowerCase().trim();
-        document.getElementById("displayName").innerText = userName;
+        document.getElementById("displayName").innerText = "Your name: "+userName;
     }
     // Function to check the user's answer
     function checkAnswer() {
@@ -443,11 +443,11 @@
     <div id="info">
         <h1>Instructions</h1>
         <div class="break"></div>
-        <span>Put your name here:</span>
+        <span>Put your name here: (hit enter to submit)</span>
         <form onsubmit="submitName(); return false;">
             <input class="label" type="text" id="userName" placeholder="Your name here" autocomplete="off" autofocus>
         </form>
-        <span>Your Name: <span id="displayName">null</span></span>
+        <span><span id="displayName"></span></span>
         <div class="break"></div>
         <p>
             To input non-integer answers, use the following format:
