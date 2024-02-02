@@ -236,7 +236,7 @@
 
     function updateImage(override) {
         var image = document.getElementById('unitCircle');
-        if (document.getElementById('degree_toggle').checked && document.getElementById('radian_toggle').checked||override) {
+        if ((document.getElementById('degree_toggle').checked && document.getElementById('radian_toggle').checked)||override) {
             if (document.getElementById('full_circle_toggle').checked) {
                 if (document.getElementById('degree_toggle').checked && questionIndex < 16) {
                     if (document.getElementById('coordinate_toggle').checked) { image.src = 'full_unit_circle_black_no_coords.svg'; }
