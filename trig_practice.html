@@ -39,6 +39,7 @@
             flex-wrap: wrap;
         }
 
+        #leaderboard,
         #options,
         #app-container {
             display: none;
@@ -200,7 +201,11 @@
         }
 
         .very-small {
-            width: 120px
+            width: 120px;
+        }
+
+        .mini {
+            width: 50%;
         }
     </style>
 </head>
@@ -306,7 +311,7 @@
 
     function submitName() {
         userName = document.getElementById("userName").value.toLowerCase().trim();
-        document.getElementById("displayName").innerText = "Your name: "+userName;
+        document.getElementById("displayName").innerText = "Your name: " + userName;
     }
     // Function to check the user's answer
     function checkAnswer() {
@@ -334,7 +339,7 @@
                 var elapsedTime = (currentTime - lastQuestionTime) / 1000;
                 totalElapsedTime += elapsedTime;
 
-                
+
                 document.getElementById("avgTimeValue").innerText = averageTime;
 
                 generateQuestion();
@@ -426,11 +431,17 @@
         document.getElementById('options').style.display = 'flex';
     }
 
+    function showLeaderboard() {
+        document.getElementById('app-container').style.display = 'none';
+        document.getElementById('leaderboard').style.display = 'flex';
+    }
+
     function startPractice() {
         changeAnswers();
         updateImage(true);
         document.getElementById('info').style.display = 'none';
         document.getElementById('options').style.display = 'none';
+        document.getElementById('leaderboard').style.display = 'none';
         document.getElementById('app-container').style.display = 'flex';
 
         // Set focus on the answer box
@@ -566,11 +577,20 @@
             <button onclick="resetCounters()">Reset</button>
             <button onclick="showInstructions()">Instructions</button>
             <button onclick="showOptions()">Options</button>
+            <button onclick="showLeaderboard()">Leaderboard</button>
         </div>
         <div class="last container">
             <div id="unitCircleContainer" class="container">
                 <img id="unitCircle" src="half_unit_circle_black.svg" alt="unitCircle" />
             </div>
+        </div>
+    </div>
+
+
+    <div id="leaderboard">
+        <div class="mini last container">
+            <script src="https://sheetdb.io/s/t/0fmvmb0b7pe48.js"></script>
+            <button onclick="startPractice()">Return to practice</button>
         </div>
     </div>
 </body>
