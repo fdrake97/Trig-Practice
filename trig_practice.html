@@ -234,9 +234,9 @@
         generateQuestion();
     }
 
-    function updateImage() {
+    function updateImage(override) {
         var image = document.getElementById('unitCircle');
-        if (document.getElementById('degree_toggle').checked && document.getElementById('radian_toggle').checked) {
+        if (document.getElementById('degree_toggle').checked && document.getElementById('radian_toggle').checked||override) {
             if (document.getElementById('full_circle_toggle').checked) {
                 if (document.getElementById('degree_toggle').checked && questionIndex < 16) {
                     if (document.getElementById('coordinate_toggle').checked) { image.src = 'full_unit_circle_black_no_coords.svg'; }
@@ -385,7 +385,8 @@
     }
 
     function startPractice() {
-        changeAnswers()
+        changeAnswers();
+        updateImage(true);
         document.getElementById('info').style.display = 'none';
         document.getElementById('options').style.display = 'none';
         document.getElementById('app-container').style.display = 'flex';
