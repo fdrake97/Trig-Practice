@@ -159,6 +159,13 @@
             /* Move the slider to the right when checked */
         }
 
+        .name-box {
+            color: #fff;
+            background-color: #000;
+            border-radius: 4px;
+            margin: 10px;
+        }
+
         /* Styles for the text labels */
         .label {
             padding: 5px 10px;
@@ -191,11 +198,13 @@
         .small {
             width: 200px;
         }
+
         .very-small {
             width: 120px
         }
     </style>
 </head>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js'></script>
 <script>
     const deg180 = ['0°', '30°', '45°', '60°', '90°', '120°', '135°', '150°', '180°'];
     const deg360 = ['210°', '225°', '240°', '270°', '300°', '315°', '330°'];
@@ -203,6 +212,7 @@
     const rad360 = ["7π/6", "5π/4", "4π/3", "3π/2", "5π/3", "7π/4", "11π/6"];
     const sinAns = ["0", "1/2", "r2/2", "r3/2", "1", "r3/2", "r2/2", "1/2", "0", "-1/2", "-r2/2", "-r3/2", "-1", "-r3/2", "-r2/2", "-1/2"];
     const cosAns = ["1", "r3/2", "r2/2", "1/2", "0", "-1/2", "-r2/2", "-r3/2", "-1", "-r3/2", "-r2/2", "-1/2", "0", "1/2", "r2/2", "r3/2"];
+    var userName = "null";
     var currentStreak = 0; // Counter for current streak
     var highestStreak = 0; // Counter for highest streak
     var timerActive = false;
@@ -236,7 +246,7 @@
 
     function updateImage(override) {
         var image = document.getElementById('unitCircle');
-        if ((document.getElementById('degree_toggle').checked && document.getElementById('radian_toggle').checked)||override) {
+        if ((document.getElementById('degree_toggle').checked && document.getElementById('radian_toggle').checked) || override) {
             if (document.getElementById('full_circle_toggle').checked) {
                 if (document.getElementById('degree_toggle').checked && questionIndex < 16) {
                     if (document.getElementById('coordinate_toggle').checked) { image.src = 'full_unit_circle_black_no_coords.svg'; }
@@ -267,8 +277,7 @@
 
     function generateQuestion() {
         var newQuestionIndex = Math.floor(Math.random() * possibleAngles.length);
-        while(newQuestionIndex == questionIndex)
-        {
+        while (newQuestionIndex == questionIndex) {
             newQuestionIndex = Math.floor(Math.random() * possibleAngles.length);
         }
         questionIndex = newQuestionIndex;
@@ -294,6 +303,11 @@
 
         updateImage();
     }
+
+    function submitName() {
+        userName = document.getElementById("userName").value.toLowerCase().trim();
+        document.getElementById("displayName").innerText = userName;
+    }
     // Function to check the user's answer
     function checkAnswer() {
         var userAnswer = document.getElementById("userAnswer").value.toLowerCase();
@@ -305,7 +319,7 @@
 
         if (isAnswerOption(userAnswer)) {
             var correctAnswer = getCorrectAnswer(currentQuestion.isSine, currentQuestion.angle);
-
+            var averageTime = totalCorrectAnswers > 0 ? (totalElapsedTime / totalCorrectAnswers).toFixed(1) : 0.0;
             if (userAnswer === correctAnswer) {
                 document.getElementById("result").innerHTML = "Correct! Well done!";
                 currentStreak++;
@@ -320,12 +334,13 @@
                 var elapsedTime = (currentTime - lastQuestionTime) / 1000;
                 totalElapsedTime += elapsedTime;
 
-                var averageTime = totalCorrectAnswers > 0 ? (totalElapsedTime / totalCorrectAnswers).toFixed(1) : 0.0;
+                
                 document.getElementById("avgTimeValue").innerText = averageTime;
 
                 generateQuestion();
             } else {
-                document.getElementById("result").innerHTML = "Incorrect. Please try again.";
+                logScore(currentStreak, averageTime);
+                document.getElementById("result").innerHTML = "Incorrect. Please try again."
                 currentStreak = 0;
                 document.getElementById("currentStreak").innerText = currentStreak;
             }
@@ -373,6 +388,33 @@
         changeAnswers();
     }
 
+    function logScore(streak, time) {
+        var averageTime = totalCorrectAnswers > 0 ? (totalElapsedTime / totalCorrectAnswers).toFixed(1) : 0.0;
+        //AJAX request
+        $.ajax({
+            url: 'https://docs.google.com/forms/d/e/1FAIpQLSfRkcA3cPDj2iAk0aKSG0kBChPqW4bIjnkvTvxEqaH-ZB2kBQ/formResponse',     //The public Google Form url, but replace /view with /formResponse
+            data: {
+                'entry.80812801': userName,
+                'entry.789232470': streak,
+                'entry.797847147': time,
+                'entry.1011088644': streak / time
+            },
+            type: 'POST',
+            dataType: "json",
+            statusCode: { //the status code from the POST request
+                0: function (data) { //0 is when Google gives a CORS error, don't worry it went through
+                    console.log('Score posted: ' + userName + ", " + streak + ", " + time + ", " + streak / time);
+                },
+                200: function (data) {//200 is a success code. it went through!
+                    console.log('Score posted: ' + userName + ", " + streak + ", " + time + ", " + streak / time);
+                },
+                403: function (data) {//403 is when something went wrong and the submission didn't go through
+                    alert('Oh no! something went wrong. we should check our code to make sure everything matches with Google');
+                }
+            }
+        });
+    }
+
     // Function to show instructions (take user back to the intro page)
     function showInstructions() {
         document.getElementById('app-container').style.display = 'none';
@@ -401,12 +443,20 @@
     <div id="info">
         <h1>Instructions</h1>
         <div class="break"></div>
+        <span>Put your name here:</span>
+        <form onsubmit="submitName(); return false;">
+            <input class="label" type="text" id="userName" placeholder="Your name here" autocomplete="off" autofocus>
+        </form>
+        <span>Your Name: <span id="displayName">null</span></span>
+        <div class="break"></div>
         <p>
             To input non-integer answers, use the following format:
             <br>
             - Fractions: x/y (e.g., 1/2, not 0.5)
             <br>
             - Square root: rx/y (e.g., r2/2 for the square root of 2 over 2)
+            <br><br>
+            Scores are logged automatically upon wrong answer.
             <br><br>
             The available answer options are:
         </p>

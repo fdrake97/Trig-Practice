@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+
+
+<body>
+
+    <form
+        action="https://docs.google.com/forms/d/e/1FAIpQLSfRkcA3cPDj2iAk0aKSG0kBChPqW4bIjnkvTvxEqaH-ZB2kBQ/formResponse"
+        method="POST">
+        <div class="item">
+            <label>Name</label>
+            <input name="entry.80812801">
+        </div>
+        <div class="item">
+            <label>Score</label>
+            <input name="entry.1011088644">
+        </div>
+        <input type="submit">
+    </form>
+    <button onclick="submitScore()">SuBmIt</button>
+</body>
+<script>
+    function submitScore() {
+        $.ajax({
+            type: 'POST',
+            url: 'https://docs.google.com/forms/d/e/1FAIpQLSfRkcA3cPDj2iAk0aKSG0kBChPqW4bIjnkvTvxEqaH-ZB2kBQ/formResponse',
+            data: { 'entry.80812801': Nope, 'entry.1011088644': 80 }
+        });
+    }
+</script>
