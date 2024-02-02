@@ -187,6 +187,13 @@
             align-content: left;
             border-radius: 4px;
         }
+
+        .small {
+            width: 200px;
+        }
+        .very-small {
+            width: 120px
+        }
     </style>
 </head>
 <script>
@@ -259,7 +266,12 @@
 
 
     function generateQuestion() {
-        questionIndex = Math.floor(Math.random() * possibleAngles.length);
+        var newQuestionIndex = Math.floor(Math.random() * possibleAngles.length);
+        while(newQuestionIndex == questionIndex)
+        {
+            newQuestionIndex = Math.floor(Math.random() * possibleAngles.length);
+        }
+        questionIndex = newQuestionIndex;
         var randomAngle = possibleAngles[questionIndex];
         var isSine = Math.random() < 0.5;
 
@@ -420,24 +432,7 @@
             <h1>Options</h1>
         </div>
         <div class="last container">
-            <div class="container">
-                <div class="last text">
-                    Full circle
-                </div>
-                <div class="last text">
-                    Degrees
-                </div>
-                <div class="last text">
-                    Radians
-                </div>
-                <div class="last text">
-                    Hide circle
-                </div>
-                <div class="last text">
-                    Hide coordinates
-                </div>
-            </div>
-            <div class="container">
+            <div class="very-small container">
                 <div class="last container">
                     <label class="toggle-container">
                         <input type="checkbox" class="toggle-input" id="full_circle_toggle">
@@ -469,6 +464,24 @@
                     </label>
                 </div>
             </div>
+            <div class="small container">
+                <div class="last text">
+                    Full circle
+                </div>
+                <div class="last text">
+                    Degrees
+                </div>
+                <div class="last text">
+                    Radians
+                </div>
+                <div class="last text">
+                    Hide circle
+                </div>
+                <div class="last text">
+                    Hide coordinates
+                </div>
+            </div>
+
         </div>
         <div class="last container">
             <button onclick="startPractice()">Start</button>
