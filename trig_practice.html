@@ -218,7 +218,7 @@
     const rad360 = ["7π/6", "5π/4", "4π/3", "3π/2", "5π/3", "7π/4", "11π/6"];
     const sinAns = ["0", "1/2", "r2/2", "r3/2", "1", "r3/2", "r2/2", "1/2", "0", "-1/2", "-r2/2", "-r3/2", "-1", "-r3/2", "-r2/2", "-1/2"];
     const cosAns = ["1", "r3/2", "r2/2", "1/2", "0", "-1/2", "-r2/2", "-r3/2", "-1", "-r3/2", "-r2/2", "-1/2", "0", "1/2", "r2/2", "r3/2"];
-    var userName = "null";
+    var userName = "unnamed";
     var currentStreak = 0; // Counter for current streak
     var highestStreak = 0; // Counter for highest streak
     var timerActive = false;
@@ -330,6 +330,7 @@
                 document.getElementById("result").innerHTML = "Correct! Well done!";
                 currentStreak++;
                 totalCorrectAnswers++;
+                document.getElementById("currentScore").innerText = Math.round(currentStreak / averageTime * 1000000);
                 document.getElementById("currentStreak").innerText = currentStreak;
                 if (currentStreak > highestStreak) {
                     highestStreak = currentStreak;
@@ -384,6 +385,8 @@
         totalCorrectAnswers = 0;
         totalElapsedTime = 0;
 
+
+        document.getElementById("currentScore").innerText = "0";
         document.getElementById("currentStreak").innerText = currentStreak;
         document.getElementById("highestStreak").innerText = highestStreak;
         document.getElementById("avgTimeValue").innerText = "0.0";
@@ -403,16 +406,16 @@
                 'entry.80812801': userName,
                 'entry.789232470': streak,
                 'entry.797847147': time,
-                'entry.1011088644': streak / time
+                'entry.1011088644': Math.round(streak / time * 1000000)
             },
             type: 'POST',
             dataType: "json",
             statusCode: { //the status code from the POST request
                 0: function (data) { //0 is when Google gives a CORS error, don't worry it went through
-                    console.log('Score posted: ' + userName + ", " + streak + ", " + time + ", " + streak / time);
+                    console.log('Score posted: ' + userName + ", " + streak + ", " + time + ", " + Math.round(streak / time * 1000000));
                 },
                 200: function (data) {//200 is a success code. it went through!
-                    console.log('Score posted: ' + userName + ", " + streak + ", " + time + ", " + streak / time);
+                    console.log('Score posted: ' + userName + ", " + streak + ", " + time + ", " + Math.round(streak / time * 1000000));
                 },
                 403: function (data) {//403 is when something went wrong and the submission didn't go through
                     alert('Oh no! something went wrong. we should check our code to make sure everything matches with Google');
@@ -570,6 +573,9 @@
                 seconds</span>
         </div>
         <div class="last container">
+            <span class="label">Current Score: <span id="currentScore">0</span></span>
+        </div>
+        <div class="last container">
             <span class="label">Current Streak: <span id="currentStreak">0</span></span>
         </div>
         <div class="last container">
@@ -592,7 +598,8 @@
         <div class="last container">
             <p>Leaderboard often takes a while to load. Please be patient.</p>
             <div class="break"></div>
-            <iframe id="board" class="leaderboard" src="https://docs.google.com/spreadsheets/d/e/2PACX-1vTmxSgA_4cux3jufRCv4jd-b50_uJm0NSsuDyqNL-r7iL1Ye0nAK0ZrQB0-nG5iG4RJLFTFuHsMeNb8/pubhtml?gid=2017848274&amp;single=true&amp;widget=true&amp;headers=false"></iframe>
+            <iframe id="board" class="leaderboard"
+                src="https://docs.google.com/spreadsheets/d/e/2PACX-1vTmxSgA_4cux3jufRCv4jd-b50_uJm0NSsuDyqNL-r7iL1Ye0nAK0ZrQB0-nG5iG4RJLFTFuHsMeNb8/pubhtml?gid=2017848274&amp;single=true&amp;widget=true&amp;headers=false"></iframe>
             <div class="break"></div>
             <button onclick="startPractice()">Return to practice</button>
         </div>
