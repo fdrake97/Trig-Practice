@@ -205,7 +205,7 @@
         }
 
         .leaderboard {
-            width: 600px;
+            width: 900px;
             height: 700px;
         }
     </style>
@@ -435,6 +435,7 @@
     function showLeaderboard() {
         document.getElementById('app-container').style.display = 'none';
         document.getElementById('leaderboard').style.display = 'flex';
+        document.getElementById('board').src = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTmxSgA_4cux3jufRCv4jd-b50_uJm0NSsuDyqNL-r7iL1Ye0nAK0ZrQB0-nG5iG4RJLFTFuHsMeNb8/pubhtml?gid=2017848274&amp;single=true&amp;widget=true&amp;headers=false";
     }
 
     function startPractice() {
@@ -589,7 +590,7 @@
 
     <div id="leaderboard">
         <div class="last container">
-            <iframe class="leaderboard" src="https://docs.google.com/spreadsheets/d/e/2PACX-1vTmxSgA_4cux3jufRCv4jd-b50_uJm0NSsuDyqNL-r7iL1Ye0nAK0ZrQB0-nG5iG4RJLFTFuHsMeNb8/pubhtml?gid=2017848274&amp;single=true&amp;widget=true&amp;headers=false"></iframe>
+            <iframe id="board" class="leaderboard" src="https://docs.google.com/spreadsheets/d/e/2PACX-1vTmxSgA_4cux3jufRCv4jd-b50_uJm0NSsuDyqNL-r7iL1Ye0nAK0ZrQB0-nG5iG4RJLFTFuHsMeNb8/pubhtml?gid=2017848274&amp;single=true&amp;widget=true&amp;headers=false"></iframe>
             <div class="break"></div>
             <button onclick="startPractice()">Return to practice</button>
         </div>
