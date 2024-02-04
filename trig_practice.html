@@ -45,6 +45,8 @@
             display: none;
             flex-wrap: wrap;
             flex-basis: 100%;
+            justify-content: center;
+
         }
 
         h1,
@@ -72,6 +74,7 @@
 
         #question-answer-container {
             margin-top: 20px;
+            margin-bottom: 5px;
             padding: 10px;
             border: 2px solid #fff;
             border-radius: 10px;
@@ -407,8 +410,8 @@
             url: 'https://docs.google.com/forms/d/e/1FAIpQLSfRkcA3cPDj2iAk0aKSG0kBChPqW4bIjnkvTvxEqaH-ZB2kBQ/formResponse',     //The public Google Form url, but replace /view with /formResponse
             data: {
                 'entry.80812801': userName,
-                'entry.789232470': Math.round(totalCorrect / totalAnswered * 100)/100,
-                'entry.797847147': Math.round(totalElapsedTime*10)/10,
+                'entry.789232470': Math.round(totalCorrect / totalAnswered * 100) / 100,
+                'entry.797847147': Math.round(totalElapsedTime * 10) / 10,
                 'entry.1011088644': Math.round(totalCorrect / totalElapsedTime * 1000000)
             },
             type: 'POST',
@@ -568,9 +571,7 @@
                 </form>
             </div>
         </div>
-        <div class="last container">
-            <span class="label" id="result"></span>
-        </div>
+        <span class="label" id="result"></span>
         <div class="last container">
             <span class="label" id="avgTime">Average Time Per Question: <span id="avgTimeValue">0.0</span>
                 seconds</span>
