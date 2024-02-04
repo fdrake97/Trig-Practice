@@ -219,12 +219,13 @@
     const sinAns = ["0", "1/2", "r2/2", "r3/2", "1", "r3/2", "r2/2", "1/2", "0", "-1/2", "-r2/2", "-r3/2", "-1", "-r3/2", "-r2/2", "-1/2"];
     const cosAns = ["1", "r3/2", "r2/2", "1/2", "0", "-1/2", "-r2/2", "-r3/2", "-1", "-r3/2", "-r2/2", "-1/2", "0", "1/2", "r2/2", "r3/2"];
     var userName = "unnamed";
+    var totalCorrect = 0;
+    var totalAnswered = 0;
     var currentStreak = 0; // Counter for current streak
     var highestStreak = 0; // Counter for highest streak
     var timerActive = false;
-    var startTime;
+    var startTime = new Date().getTime() / 1000;
     var lastQuestionTime;
-    var totalCorrectAnswers = 0;
     var totalElapsedTime = 0;
     var questionIndex;
     var possibleAngles = ['0°', '30°', '45°', '60°', '90°', '120°', '135°', '150°', '180°'];
@@ -305,7 +306,7 @@
         document.getElementById("result").innerHTML = "";
 
         // Record the time when the question is displayed
-        lastQuestionTime = new Date().getTime();
+        lastQuestionTime = new Date().getTime() / 1000;
 
         updateImage();
     }
@@ -316,6 +317,7 @@
     }
     // Function to check the user's answer
     function checkAnswer() {
+        totalAnswered++;
         var userAnswer = document.getElementById("userAnswer").value.toLowerCase();
 
         // Check if the user has entered something
@@ -325,28 +327,25 @@
 
         if (isAnswerOption(userAnswer)) {
             var correctAnswer = getCorrectAnswer(currentQuestion.isSine, currentQuestion.angle);
-            var averageTime = totalCorrectAnswers > 0 ? (totalElapsedTime / totalCorrectAnswers).toFixed(1) : 0.0;
+            var averageTime = totalAnswered > 0 ? ((new Date().getTime() / 1000 - startTime) / totalAnswered).toFixed(1) : 0.0;
             if (userAnswer === correctAnswer) {
                 document.getElementById("result").innerHTML = "Correct! Well done!";
+                totalCorrect++;
                 currentStreak++;
-                totalCorrectAnswers++;
-                document.getElementById("currentScore").innerText = Math.round(currentStreak / averageTime * 1000000);
+                document.getElementById("currentScore").innerText = generateScore();
                 document.getElementById("currentStreak").innerText = currentStreak;
                 if (currentStreak > highestStreak) {
                     highestStreak = currentStreak;
                     document.getElementById("highestStreak").innerText = highestStreak;
                 }
 
-                var currentTime = new Date().getTime();
-                var elapsedTime = (currentTime - lastQuestionTime) / 1000;
-                totalElapsedTime += elapsedTime;
-
+                var currentTime = new Date().getTime() / 1000;
+                totalElapsedTime = currentTime - startTime;
 
                 document.getElementById("avgTimeValue").innerText = averageTime;
 
                 generateQuestion();
             } else {
-                logScore(currentStreak, averageTime);
                 document.getElementById("result").innerHTML = "Incorrect. Please try again."
                 currentStreak = 0;
                 document.getElementById("currentStreak").innerText = currentStreak;
@@ -377,12 +376,12 @@
 
     // Function to reset all counters and timers
     function resetCounters() {
+        totalCorrect = 0;
         currentStreak = 0;
         highestStreak = 0;
         timerActive = false;
-        startTime = 0;
+        startTime = new Date().getTime() / 1000;
         lastQuestionTime = 0;
-        totalCorrectAnswers = 0;
         totalElapsedTime = 0;
 
 
@@ -397,25 +396,29 @@
         changeAnswers();
     }
 
-    function logScore(streak, time) {
-        var averageTime = totalCorrectAnswers > 0 ? (totalElapsedTime / totalCorrectAnswers).toFixed(1) : 0.0;
+    function generateScore() {
+        return Math.round(totalCorrect / (new Date().getTime() / 1000 - startTime) * 1000000).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+
+    function logScore() {
+        var averageTime = totalCorrect > 0 ? (totalElapsedTime / totalCorrect).toFixed(1) : 0.0;
         //AJAX request
         $.ajax({
             url: 'https://docs.google.com/forms/d/e/1FAIpQLSfRkcA3cPDj2iAk0aKSG0kBChPqW4bIjnkvTvxEqaH-ZB2kBQ/formResponse',     //The public Google Form url, but replace /view with /formResponse
             data: {
                 'entry.80812801': userName,
-                'entry.789232470': streak,
-                'entry.797847147': time,
-                'entry.1011088644': Math.round(streak / time * 1000000)
+                'entry.789232470': Math.round(totalCorrect / totalAnswered * 100)/100,
+                'entry.797847147': Math.round(totalElapsedTime*10)/10,
+                'entry.1011088644': Math.round(totalCorrect / totalElapsedTime * 1000000)
             },
             type: 'POST',
             dataType: "json",
             statusCode: { //the status code from the POST request
                 0: function (data) { //0 is when Google gives a CORS error, don't worry it went through
-                    console.log('Score posted: ' + userName + ", " + streak + ", " + time + ", " + Math.round(streak / time * 1000000));
+                    console.log('Score posted: ' + userName + ", " + Math.round(totalCorrect / totalAnswered * 100) + ", " + totalElapsedTime + ", " + Math.round(totalCorrect / totalElapsedTime * 1000000));
                 },
                 200: function (data) {//200 is a success code. it went through!
-                    console.log('Score posted: ' + userName + ", " + streak + ", " + time + ", " + Math.round(streak / time * 1000000));
+                    console.log('Score posted: ' + userName + ", " + Math.round(totalCorrect / totalAnswered * 100) + ", " + totalElapsedTime + ", " + Math.round(totalCorrect / totalElapsedTime * 1000000));
                 },
                 403: function (data) {//403 is when something went wrong and the submission didn't go through
                     alert('Oh no! something went wrong. we should check our code to make sure everything matches with Google');
@@ -585,6 +588,8 @@
             <button onclick="resetCounters()">Reset</button>
             <button onclick="showInstructions()">Instructions</button>
             <button onclick="showOptions()">Options</button>
+            <div class="break"></div>
+            <button onclick="logScore()">Add score to leaderboard</button>
             <button onclick="showLeaderboard()">Leaderboard</button>
         </div>
         <div class="last container">
