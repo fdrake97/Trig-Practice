@@ -339,7 +339,7 @@
                 totalCorrect++;
                 currentStreak++;
                 document.getElementById("avgTimeValue").innerText = averageTime;
-                document.getElementById("currentScore").innerText = generateScore(totalElapsedTime, totalAnswered);//+" "+totalAnswered/totalElapsedTime;
+                document.getElementById("currentScore").innerText = generateScore(averageTime, totalCorrect);//+" "+totalAnswered/totalElapsedTime;
                 document.getElementById("currentStreak").innerText = currentStreak;
                 if (currentStreak > highestStreak) {
                     highestStreak = currentStreak;
@@ -400,8 +400,8 @@
         changeAnswers();
     }
 
-    function generateScore(time, score) {
-        return Math.round(score / (time) * 1000000).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    function generateScore(time, correct) {
+        return Math.round(correct / (time) * 1000000).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     }
 
     function logScore() {
@@ -413,7 +413,7 @@
                 'entry.80812801': userName,
                 'entry.789232470': Math.round(totalCorrect / totalAnswered * 100) / 100,
                 'entry.797847147': Math.round(totalElapsedTime * 10) / 10,
-                'entry.1011088644': Math.round(totalCorrect / totalElapsedTime * 1000000)
+                'entry.1011088644': Math.round(totalCorrect / averageTime * 1000000)
             },
             type: 'POST',
             dataType: "json",
