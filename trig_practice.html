@@ -222,6 +222,7 @@
     const sinAns = ["0", "1/2", "r2/2", "r3/2", "1", "r3/2", "r2/2", "1/2", "0", "-1/2", "-r2/2", "-r3/2", "-1", "-r3/2", "-r2/2", "-1/2"];
     const cosAns = ["1", "r3/2", "r2/2", "1/2", "0", "-1/2", "-r2/2", "-r3/2", "-1", "-r3/2", "-r2/2", "-1/2", "0", "1/2", "r2/2", "r3/2"];
     var userName = "unnamed";
+    var started = false;
     var totalCorrect = 0;
     var totalAnswered = 0;
     var currentStreak = 0; // Counter for current streak
@@ -448,6 +449,7 @@
     }
 
     function startPractice() {
+        if (!started) {resetCounters(); started = true;}
         changeAnswers();
         updateImage(true);
         document.getElementById('info').style.display = 'none';
