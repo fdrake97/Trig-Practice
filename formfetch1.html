@@ -1,0 +1,13 @@
+<script>
+        fetch('https://script.google.com/macros/s/AKfycbzjapYasWT3vAmjTsftGauPY0LAm4e2pJD529IqXNsNONQznYwnYs_IwPVOa5zkNsogEA/exec').then(res => res.json()).then(data => {
+            let tr = data.content.reduce((prev, cur) => 
+            {
+                let td = cur.map(e => '<td>${e}</td>')
+                return prev + '<tr>${td.join("")}</tr>'
+            }, "\r")
+            console.log(tr);
+        });
+</script>
+<script>
+    fetch('https://script.google.com/macros/s/AKfycbzjapYasWT3vAmjTsftGauPY0LAm4e2pJD529IqXNsNONQznYwnYs_IwPVOa5zkNsogEA/exec').then(res => res.json()).then(data => console.log(data));
+</script>
