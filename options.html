@@ -81,6 +81,35 @@
       document.getElementById("circle_toggle").checked = false
     }
   })
+
+  function updateCookies() {
+
+  }
+
+  document.getElementById("full_circle_toggle").addEventListener('change', function () {
+    setCookie('full_circle_toggle', document.getElementById("full_circle_toggle").checked);
+  })
+
+  document.getElementById("degree_toggle").addEventListener('change', function () {
+    setCookie('degree_toggle', document.getElementById("degree_toggle").checked);
+    setCookie('radian_toggle', document.getElementById("radian_toggle").checked);
+  })
+
+  document.getElementById("radian_toggle").addEventListener('change', function () {
+    setCookie('degree_toggle', document.getElementById("degree_toggle").checked);
+    setCookie('radian_toggle', document.getElementById("radian_toggle").checked);
+  })
+
+  document.getElementById("circle_toggle").addEventListener('change', function () {
+    setCookie('circle_toggle', document.getElementById("circle_toggle").checked);
+    setCookie('coordinate_toggle', document.getElementById("coordinate_toggle").checked);
+  })
+
+  document.getElementById("coordinate_toggle").addEventListener('change', function () {
+    setCookie('circle_toggle', document.getElementById("circle_toggle").checked);
+    setCookie('coordinate_toggle', document.getElementById("coordinate_toggle").checked);
+  })
+
 </script>
 
 
