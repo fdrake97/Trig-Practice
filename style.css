@@ -26,6 +26,30 @@ box + box {
   right:0;
 }
 
+#question-box {
+  margin-top: 20px;
+  margin-bottom: 5px;
+  padding: 10px;
+  border: 2px solid #fff;
+  border-radius: 10px;
+  width: 300px;
+  text-align: center;
+  align-content: center;
+}
+
+#question {
+  font-size: 24px;
+  margin: 20px;
+}
+
+#answer {
+  background-color: #181818;
+  color: #fff;
+  padding: 10px;
+  margin: 10px;
+  border-radius: 5px;
+}
+
 button {
   background-color: #181818;
   color: #fff;

@@ -6,20 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Trig Practice</title>
   <link rel="icon" type="image/x-icon" href="./favicon.ico">
-  <style>
-    body {
-      /*font-family: Arial, sans-serif;
-              text-align: center;
-              margin: 50px;*/
-      background-color: #181818;
-      /* Black background for the page */
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #fff;
-      font-family: Arial, sans-serif;
-      font-size: 18px;
-    }
+  <link rel="stylesheet" href="./style.css">
   </style>
 </head>
 
@@ -27,10 +14,17 @@
 
 <body>
   <app>
-
+    <div id="question-box">
+      <div id="question">hmmm.. something seems to be wrong.</div>
+      <form onsubmit="checkAnswer()">
+        <input type="text" id="answer" placeholder="Your answer" autocomplete="off" autofocus>
+      </form>
+    </div>
+    <span class="label" id="result"></span>
   </app>
 </body>
 
 <script>
   Window.onload = scanCookies();
+  Window.onload = newQuestion();
 </script>

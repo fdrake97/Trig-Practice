@@ -79,28 +79,29 @@ function getCookie(cookieName) {
 
 function newQuestion() {
   //generate question
-  let currentQuestion = (int)(Math.random() * 17)
-  let currentSinState = (int)(Math.random() * 2)
+  let currentQuestion = getCookie('full_circle_toggle') == 'true' ? Math.floor(Math.random() * 17) : Math.floor(Math.random() * 9);
+  let currentSinState = Math.floor(Math.random() * 2)
   //check if qestion is different from last (ignores rad/deg)
   if (currentQuestion + 17 * (currentSinState) == lastQuestion) {
     newQuestion();
     return;
   }
   //choose degree or radian
-  let degVsRad = deg ? rad ? (int)(Math.random() * 2) : 0 : 1;
+  let degVsRad = getCookie('degree_toggle') == 'true' ? (getCookie('radian_toggle') == 'true' ? Math.floor(Math.random() * 2) : 0) : 1;
   //actually select question
   let question = currentSinState == 0 ? "Sin (" + sinArray[currentQuestion][degVsRad] + ")" : "Cos (" + sinArray[currentQuestion][degVsRad] + ")";
   //choose matching answer
-  currentAnswer = sinArray[(currentQuestion - 4 * currentSinState) % 16][2];
+  currentAnswer = sinArray[(currentQuestion - 4 * currentSinState + 16) % 16][2];
   console.log(currentAnswer);
   //update last question
   lastQuestion = currentQuestion + 17 * (currentSinState);
   //SET QUESTION//
+  document.getElementById('question').innerText = question;
 }
 
 function checkAnswer() {
   //collect answer
-  var userAnswer = document.getElementById("userAnswer").value.toLowerCase().trim();
+  var userAnswer = document.getElementById("answer").value.toLowerCase().trim();
   //check if answer is an option
   if (isAnswerOption(userAnswer)) {
     //increment total answers
@@ -117,8 +118,8 @@ function checkAnswer() {
         setCookie("bestScore", bestScore)
       }
       document.getElementById("result").innerHTML = "Correct! Well done!";
-      updateScore();
-      newQuestion();
+      //updateScore();
+      //newQuestion();
     }
     else {
       currentStreak = 0;
