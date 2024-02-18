@@ -8,6 +8,14 @@ body {
   font-size: 18px;
 }
 
+box {
+  display: flex;
+}
+
+box + box {
+  margin-top: 5px;
+}
+
 button {
   background-color: #181818;
   color: #fff;
@@ -34,9 +42,13 @@ input{
 }
 
 .toggle-label {
-  padding: 15px;
-  background-color: #6e7bc4;
+  padding: 0px 15px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  height: 30px;
 }
+
 .toggle-container {
   position: relative;
   display: inline-block;
