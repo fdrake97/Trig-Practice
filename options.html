@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Trig Options</title>
+  <link rel="icon" type="image/x-icon" href="./favicon.ico">
+  <link rel="stylesheet" href="./style.css">
+  </style>
+</head>
+
+<script type="text/javascript" src="./functions.js"></script>
+
+<body>
+  <div class="last container">
+    <h1>Options</h1>
+    <div>
+      <label class="toggle-container">
+        <input type="checkbox" class="toggle-input" id="full_circle_toggle">
+        <span class="toggle-slider"></span>
+      </label>
+      <label class="toggle-container">Full circle</text>
+    </div>
+    <br>
+    <label class="toggle-container">
+      <input type="checkbox" class="toggle-input" id="degree_toggle" checked>
+      <span class="toggle-slider"></span>
+    </label>
+    Degrees
+    <br>
+    <label class="toggle-container">
+      <input type="checkbox" class="toggle-input" id="radian_toggle">
+      <span class="toggle-slider"></span>
+    </label>
+    Radians
+    <br>
+    <label class="toggle-container">
+      <input type="checkbox" class="toggle-input" id="circle_toggle">
+      <span class="toggle-slider"></span>
+    </label>
+    Hide circle (type only)
+    <br>
+    <label class="toggle-container">
+      <input type="checkbox" class="toggle-input" id="coordinate_toggle">
+      <span class="toggle-slider"></span>
+    </label>
+    Hide coordinates
+    <br>
+    <br>
+    Change name:
+    <form onsubmit="submitName(); return false;">
+      <input class="label" type="text" id="userName" placeholder="Your name here" autocomplete="off" autofocus>
+    </form>
+    (Hit 'Enter' to submit)
+    <br>
+    <button onclick="startPractice()">Start</button>
+</body>
+
+<script>
+  document.getElementById("degree_toggle").addEventListener('change', function () {
+    if (!document.getElementById("degree_toggle").checked) {
+      document.getElementById("radian_toggle").checked = true
+    }
+  })
+
+  document.getElementById("radian_toggle").addEventListener('change', function () {
+    if (!document.getElementById("radian_toggle").checked) {
+      document.getElementById("degree_toggle").checked = true
+    }
+  })
+
+  document.getElementById("circle_toggle").addEventListener('change', function () {
+    if (document.getElementById("circle_toggle").checked) {
+      document.getElementById("coordinate_toggle").checked = true
+    }
+  })
+
+  document.getElementById("coordinate_toggle").addEventListener('change', function () {
+    if (!document.getElementById("coordinate_toggle").checked) {
+      document.getElementById("circle_toggle").checked = false
+    }
+  })
+</script>
+
+
+<script>
+  Window.onload = scanCookies();
+</script>
