@@ -10,21 +10,25 @@
   </style>
 </head>
 
-<script type="text/javascript" src="./functions.js"></script>
+<script type="text/javascript" src="./functions.js">const currentPage = 'app2'</script>
 
 <body>
   <app>
     <div id="question-box">
       <div id="question">hmmm.. something seems to be wrong.</div>
-      <form onsubmit="checkAnswer()">
+      <form onsubmit="event.preventDefault(); checkAnswer();">
         <input type="text" id="answer" placeholder="Your answer" autocomplete="off" autofocus>
       </form>
     </div>
-    <span class="label" id="result"></span>
+    <div class='label' id="result"></div>
   </app>
+  <div class="container">
+    <a href="./options.html" class="bottomRight"><button onclick="setCookie('hold', true)">Options</button></a>
+  </div>
 </body>
 
 <script>
+  Window.onload = setCookie('redirect', 'app2');
   Window.onload = scanCookies();
   Window.onload = newQuestion();
 </script>

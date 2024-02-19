@@ -58,8 +58,10 @@
     </form>
     (Hit 'Enter' to submit)
     <br>
-    -->
+    
     <a href="./welcome.html"><button>Start</button></a>
+  -->
+    <button onclick="redirect(true)">Start</button>
 </body>
 
 <script>
@@ -87,33 +89,54 @@
     }
   })
 
-  document.getElementById("full_circle_toggle").addEventListener('change', function () {
+  function updateSettings() {
     setCookie('full_circle_toggle', document.getElementById("full_circle_toggle").checked);
+    setCookie('degree_toggle', document.getElementById("degree_toggle").checked);
+    setCookie('radian_toggle', document.getElementById("radian_toggle").checked);
+    setCookie('circle_toggle', document.getElementById("circle_toggle").checked);
+    setCookie('coordinate_toggle', document.getElementById("coordinate_toggle").checked);
+    setCookie('set', true);
+  }
+
+  document.getElementById("full_circle_toggle").addEventListener('change', function () {
+    updateSettings();
   })
 
   document.getElementById("degree_toggle").addEventListener('change', function () {
-    setCookie('degree_toggle', document.getElementById("degree_toggle").checked);
-    setCookie('radian_toggle', document.getElementById("radian_toggle").checked);
+    updateSettings();
   })
 
   document.getElementById("radian_toggle").addEventListener('change', function () {
-    setCookie('degree_toggle', document.getElementById("degree_toggle").checked);
-    setCookie('radian_toggle', document.getElementById("radian_toggle").checked);
+    updateSettings();
   })
 
   document.getElementById("circle_toggle").addEventListener('change', function () {
-    setCookie('circle_toggle', document.getElementById("circle_toggle").checked);
-    setCookie('coordinate_toggle', document.getElementById("coordinate_toggle").checked);
+    updateSettings();
   })
 
   document.getElementById("coordinate_toggle").addEventListener('change', function () {
-    setCookie('circle_toggle', document.getElementById("circle_toggle").checked);
-    setCookie('coordinate_toggle', document.getElementById("coordinate_toggle").checked);
+    updateSettings();
   })
 
+  function redirect(override) {
+    if (override || getCookie('hold') != 'true') {
+      setCookie('hold', false);
+      if (getCookie('redirect') == 'welcome') {
+        window.location.href = './welcome.html';
+      }
+      if (getCookie('redirect') == 'app1') {
+        window.location.href = './app1.html';
+      }
+      if (getCookie('redirect') == 'app2') {
+        window.location.href = './app2.html';
+      }
+    }
+  }
 </script>
 
 
 <script>
+  Window.onload = redirect();
   Window.onload = scanCookies();
+  Window.onload = updateSettings();
 </script>

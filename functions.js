@@ -29,6 +29,9 @@ var timeOfLastCorrect = startTime;
 var root = document.querySelector(':root');
 
 function scanCookies() {
+  if (getCookie('set') != 'true') {
+    window.location.href = './options.html';
+  }
   cookie = getCookie("backgroundColor")
   if (!cookie == "") {
     console.log(cookie)
@@ -87,7 +90,7 @@ function newQuestion() {
     return;
   }
   //choose degree or radian
-  let degVsRad = getCookie('degree_toggle') == 'true' ? (getCookie('radian_toggle') == 'true' ? Math.floor(Math.random() * 2) : 0) : 1;
+  let degVsRad = getCookie('radian_toggle') == 'true' ? (getCookie('degree_toggle') == 'true' ? Math.floor(Math.random() * 2) : 1) : 0;
   //actually select question
   let question = currentSinState == 0 ? "Sin (" + sinArray[currentQuestion][degVsRad] + ")" : "Cos (" + sinArray[currentQuestion][degVsRad] + ")";
   //choose matching answer

@@ -75,6 +75,11 @@ input{
   color: #fff;
 }
 
+.label {
+  text-align: center;
+  padding: 5px;
+}
+
 .toggle-label {
   padding: 0px 15px;
   position: relative;
