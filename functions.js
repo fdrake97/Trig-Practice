@@ -120,17 +120,17 @@ function checkAnswer() {
         bestScore = currentScore;
         setCookie("bestScore", bestScore)
       }
-      document.getElementById("result").innerHTML = "Correct! Well done!";
+      document.getElementById("result").innerText = "Correct! Well done!";
       //updateScore();
       //newQuestion();
     }
     else {
       currentStreak = 0;
-      document.getElementById("result").innerHTML = "Incorrect. Please try again."
+      document.getElementById("result").innerText = "Incorrect. Please try again."
     }
   }
   else {
-    document.getElementById("result").innerHTML = "Please enter a valid answer option.";
+    document.getElementById("result").innerText = "Please enter a valid answer option.";
   }
 }
 
