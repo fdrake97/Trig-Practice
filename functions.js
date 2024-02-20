@@ -27,13 +27,14 @@ var currentScore = 0;
 var bestScore = 0;
 var timeOfLastCorrect = startTime;
 var root = document.querySelector(':root');
+var lifetimeCorrect = 0;
 
 function scanCookies() {
   if (getCookie('set') != 'true') {
     window.location.href = './options.html';
   }
   cookie = getCookie("backgroundColor")
-  if (!cookie == "") {
+  if (cookie != "") {
     console.log(cookie)
     document.body.style.backgroundColor = cookie;
     var all = document.getElementsByTagName("input")
@@ -42,7 +43,7 @@ function scanCookies() {
     }
   }
   cookie = getCookie("textColor")
-  if (!cookie == "") {
+  if (cookie != "") {
     console.log(cookie)
     var all = document.getElementsByTagName("*");
 
@@ -50,7 +51,10 @@ function scanCookies() {
       all[i].style.color = cookie;
     }
   }
-  if (!getCookie("bestScore") == "") { bestScore = getCookie("bestScore"); }
+  cookie = getCookie("bestScore");
+  if (cookie != "") { bestScore = cookie; }
+  cookie = getCookie("lifetimeCorrect");
+  if (cookie != "") { lifetimeCorrect = cookie; }
 }
 
 function setCookie(cname, cvalue) {
@@ -94,7 +98,7 @@ function newQuestion() {
   //actually select question
   let question = currentSinState == 0 ? "Sin (" + sinArray[currentQuestion][degVsRad] + ")" : "Cos (" + sinArray[currentQuestion][degVsRad] + ")";
   //choose matching answer
-  currentAnswer = sinArray[(currentQuestion - 4 * currentSinState + 16) % 16][2];
+  currentAnswer = sinArray[(currentQuestion + 4 * currentSinState + 16) % 16][2];
   console.log(currentAnswer);
   //update last question
   lastQuestion = currentQuestion + 17 * (currentSinState);
@@ -115,14 +119,15 @@ function checkAnswer() {
       timeOfLastCorrect = new Date().getTime() / 1000;
       currentStreak++;
       totalCorrect++;
-      currentScore = totalCorrect * totalCorrect / (timeOfLastCorrect - startTime);
+      lifetimeCorrect++;
+      setCookie('lifetimeCorrect', lifetimeCorrect);
+      currentScore = Math.floor(totalCorrect**2 / (timeOfLastCorrect - startTime) * 1000);
       if (currentScore > bestScore) {
         bestScore = currentScore;
         setCookie("bestScore", bestScore)
       }
       document.getElementById("result").innerText = "Correct! Well done!";
-      //updateScore();
-      //newQuestion();
+      newQuestion();
     }
     else {
       currentStreak = 0;
@@ -132,6 +137,8 @@ function checkAnswer() {
   else {
     document.getElementById("result").innerText = "Please enter a valid answer option.";
   }
+  document.getElementById('score').innerHTML = scoreGen();
+  document.getElementById("answer").value = "";
 }
 
 function isAnswerOption(answer) {
@@ -139,4 +146,8 @@ function isAnswerOption(answer) {
     if (sinArray[x][2] == answer) { return true; }
   }
   return false;
+}
+
+function scoreGen() {
+  return '<p>Score: ' + currentScore + '<br>Streak: ' + currentStreak + '<br>Average time: ' + Math.floor((timeOfLastCorrect - startTime) / totalCorrect*100)/100+' seconds<br><br>Total correct: ' + lifetimeCorrect + '<br>Best score: ' + bestScore + '<p>';
 }

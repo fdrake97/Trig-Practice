@@ -119,18 +119,26 @@
   })
 
   function redirect(override) {
-    if (override || getCookie('hold') != 'true') {
-      setCookie('hold', false);
-      if (getCookie('redirect') == 'welcome') {
-        window.location.href = './welcome.html';
-      }
-      if (getCookie('redirect') == 'app1') {
-        window.location.href = './app1.html';
-      }
-      if (getCookie('redirect') == 'app2') {
-        window.location.href = './app2.html';
+    if (override || !hold()) {
+      console.log(getCookie('redirect'));
+      switch (String(getCookie('redirect'))) {
+        case "app1":
+          window.location.href = './app1.html';
+          break;
+        case "app2":
+          window.location.href = './app2.html';
+          break;
+        default:
+          window.location.href = './welcome.html';
       }
     }
+  }
+
+  function hold() {
+    let redir = getCookie('redirect');
+    if (redir.charAt(0) != '#') { return false; }
+    setCookie('redirect', getCookie('redirect').substring(1));
+    return true;
   }
 </script>
 
