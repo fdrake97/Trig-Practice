@@ -26,6 +26,12 @@ box + box {
   right:0;
 }
 
+.bottomLeft {
+  position:absolute;
+  bottom:0;
+  left:0;
+}
+
 #question-box {
   margin-top: 20px;
   margin-bottom: 5px;

@@ -61,7 +61,7 @@
     
     <a href="./welcome.html"><button>Start</button></a>
   -->
-    <button onclick="redirect(true)">Start</button>
+    <button id='back' onclick="redirect(true)">Start</button>
 </body>
 
 <script>
@@ -96,6 +96,7 @@
     setCookie('circle_toggle', document.getElementById("circle_toggle").checked);
     setCookie('coordinate_toggle', document.getElementById("coordinate_toggle").checked);
     setCookie('set', true);
+    if (getCookie('redirect') == 'welcome'){document.getElementById('back').innerText = 'Back'}
   }
 
   document.getElementById("full_circle_toggle").addEventListener('change', function () {

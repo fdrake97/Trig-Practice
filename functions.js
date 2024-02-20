@@ -96,7 +96,7 @@ function newQuestion() {
   //choose degree or radian
   let degVsRad = getCookie('radian_toggle') == 'true' ? (getCookie('degree_toggle') == 'true' ? Math.floor(Math.random() * 2) : 1) : 0;
   //actually select question
-  let question = currentSinState == 0 ? "Sin (" + sinArray[currentQuestion][degVsRad] + ")" : "Cos (" + sinArray[currentQuestion][degVsRad] + ")";
+  let question = currentSinState == 0 ? "cin(" + sinArray[currentQuestion][degVsRad] + ")" : "cos(" + sinArray[currentQuestion][degVsRad] + ")";
   //choose matching answer
   currentAnswer = sinArray[(currentQuestion + 4 * currentSinState + 16) % 16][2];
   console.log(currentAnswer);
