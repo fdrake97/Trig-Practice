@@ -12,20 +12,24 @@
 
 <script type="text/javascript" src="./functions.js">const currentPage = 'app2'</script>
 
-<body>
-  <app>
-    <div id="question-box">
-      <div id="question">hmmm.. something seems to be wrong.</div>
-      <form onsubmit="event.preventDefault(); checkAnswer();">
-        <input type="text" id="answer" placeholder="Your answer" autocomplete="off" autofocus>
-      </form>
+<body style="flex-wrap: wrap;">
+  <app style="display: flex; flex-basis: 100%; justify-content: center; ">
+    <div style="width: 325px;">
+      <div id="question-box">
+        <div id="question">hmmm.. something seems to be wrong.</div>
+        <form onsubmit="event.preventDefault(); checkAnswer();">
+          <input type="text" id="answer" placeholder="Your answer" autocomplete="off" autofocus>
+        </form>
+      </div>
+      <div class='label' id="result"></div>
+      <div id="score"></div>
     </div>
-    <div class='label' id="result"></div>
-    <div id="score"></div>
   </app>
-  <div class="container">
-    <a href="./options.html" class="bottomRight"><button onclick="setCookie('redirect', '#app2')">Options</button></a>
-    <a href="./welcome.html" class="bottomLeft"><button>Select mode</button></a>
+  <div style="display: flex; justify-content: center; flex-basis: 100%;"><img id="image" style="width: 50%; height: auto;"></img></div>
+
+  <div class="navbar">
+    <button class="bottomRight" onclick="window.location.href='./options.html'; setCookie('redirect', '#app2')">Options</button>
+    <button class="bottomLeft" onclick="window.location.href='./welcome.html'">Select mode</button>
   </div>
 </body>
 

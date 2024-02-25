@@ -28,6 +28,7 @@ var bestScore = 0;
 var timeOfLastCorrect = startTime;
 var root = document.querySelector(':root');
 var lifetimeCorrect = 0;
+var degVsRad;
 
 function scanCookies() {
   if (getCookie('set') != 'true') {
@@ -94,9 +95,9 @@ function newQuestion() {
     return;
   }
   //choose degree or radian
-  let degVsRad = getCookie('radian_toggle') == 'true' ? (getCookie('degree_toggle') == 'true' ? Math.floor(Math.random() * 2) : 1) : 0;
+  degVsRad = getCookie('radian_toggle') == 'true' ? (getCookie('degree_toggle') == 'true' ? Math.floor(Math.random() * 2) : 1) : 0;
   //actually select question
-  let question = currentSinState == 0 ? "cin(" + sinArray[currentQuestion][degVsRad] + ")" : "cos(" + sinArray[currentQuestion][degVsRad] + ")";
+  let question = currentSinState == 0 ? "sin(" + sinArray[currentQuestion][degVsRad] + ")" : "cos(" + sinArray[currentQuestion][degVsRad] + ")";
   //choose matching answer
   currentAnswer = sinArray[(currentQuestion + 4 * currentSinState + 16) % 16][2];
   console.log(currentAnswer);
@@ -104,6 +105,8 @@ function newQuestion() {
   lastQuestion = currentQuestion + 17 * (currentSinState);
   //SET QUESTION//
   document.getElementById('question').innerText = question;
+  //update image//
+  loadImage();
 }
 
 function checkAnswer() {
@@ -121,7 +124,7 @@ function checkAnswer() {
       totalCorrect++;
       lifetimeCorrect++;
       setCookie('lifetimeCorrect', lifetimeCorrect);
-      currentScore = Math.floor(totalCorrect**2 / (timeOfLastCorrect - startTime) * 1000);
+      currentScore = Math.floor(totalCorrect ** 2 / (timeOfLastCorrect - startTime) * 1000);
       if (currentScore > bestScore) {
         bestScore = currentScore;
         setCookie("bestScore", bestScore)
@@ -149,5 +152,39 @@ function isAnswerOption(answer) {
 }
 
 function scoreGen() {
-  return '<p>Score: ' + currentScore + '<br>Streak: ' + currentStreak + '<br>Average time: ' + Math.floor((timeOfLastCorrect - startTime) / totalCorrect*100)/100+' seconds<br><br>Total correct: ' + lifetimeCorrect + '<br>Best score: ' + bestScore + '<p>';
+  return '<p>Score: ' + currentScore + '<br>Streak: ' + currentStreak + '<br>Average time: ' + Math.floor((timeOfLastCorrect - startTime) / totalCorrect * 100) / 100 + ' seconds<br><br>Total correct: ' + lifetimeCorrect + '<br>Best score: ' + bestScore + '<p>';
+}
+
+function loadImage() {
+  mask = 0b0000;
+  if (getCookie('full_circle_toggle') == 'true') { mask = mask | 0b100; }
+  mask = mask | degVsRad*2;
+  if (getCookie('coordinate_toggle') == 'true') { mask = mask | 0b001; }
+  console.log(mask);
+  switch (mask) {
+    case 0b100:
+      document.getElementById('image').src = 'full_unit_circle_black_no_coords.svg';
+      break;
+    case 0b101:
+      document.getElementById('image').src = 'full_unit_circle_black.svg';
+      break;
+    case 0b110:
+      document.getElementById('image').src = 'full_unit_circle_rad_no_coords.svg';
+      break;
+    case 0b111:
+      document.getElementById('image').src = 'full_unit_circle_rad.svg';
+      break;
+    case 0b000:
+      document.getElementById('image').src = 'half_unit_circle_black_no_coords.svg';
+      break;
+    case 0b001:
+      document.getElementById('image').src = 'half_unit_circle_black.svg';
+      break;
+    case 0b010:
+      document.getElementById('image').src = 'half_unit_circle_rad_no_coords.svg';
+      break;
+    case 0b011:
+      document.getElementById('image').src = 'half_unit_circle_rad.svg';
+      break;
+  }
 }
