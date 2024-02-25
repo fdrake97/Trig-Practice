@@ -76,6 +76,10 @@ button:hover {
   border-color: #4c7f7c;
 }
 
+canvas {
+  background-color: #f1f1f1;
+}
+
 .navbar {
   overflow: hidden;
   //background-color: #333;
