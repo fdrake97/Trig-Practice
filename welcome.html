@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Trig Welcome</title>
+  <link rel="icon" type="image/x-icon" href="./favicon.ico">
+  <link rel="stylesheet" href="./style.css">
+  </style>
+</head>
+
+<script type="text/javascript" src="./functions.js">const currentPage = 'welcome'</script>
+
+<body>
+  <instructions>
+    <h1>Welcome!</h1>
+    <p>
+      To input non-integer answers, use the following format:
+      <br>
+      - Fractions: x/y (e.g., 1/2, not 0.5)
+      <br>
+      - Square root: rx/y (e.g., r2/2 for the square root of 2 over 2)
+      <br><br>
+      The available answer options are:
+    </p>
+    <ul>
+      <li>0</li>
+      <li>1/2</li>
+      <li>r2/2</li>
+      <li>r3/2</li>
+      <li>1</li>
+      <li>-1/2</li>
+      <li>-r2/2</li>
+      <li>-r3/2</li>
+      <li>-1</li>
+    </ul>
+    <a href="./app2.html"><button>Practice</button></a>
+  </instructions>
+  <div class="navbar">
+    <button class="bottomRight" onclick="window.location.href='./options.html'; setCookie('redirect', '#welcome')">Options</button>
+  </div>
+</body>
+
+
+
+<script>
+  Window.onload = setCookie('redirect', 'welcome');
+  Window.onload = scanCookies();
+</script>
