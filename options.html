@@ -99,6 +99,14 @@
     if (getCookie('redirect') == 'welcome'){document.getElementById('back').innerText = 'Back'}
   }
 
+  function loadSettings() {
+    document.getElementById("full_circle_toggle").checked = getCookie('full_circle_toggle')=='true';
+    document.getElementById("degree_toggle").checked = getCookie('degree_toggle')=='true';
+    document.getElementById("radian_toggle").checked = getCookie('radian_toggle')=='true';
+    document.getElementById("circle_toggle").checked = getCookie('circle_toggle')=='true';
+    document.getElementById("coordinate_toggle").checked = getCookie('coordinate_toggle')=='true';
+  }
+
   document.getElementById("full_circle_toggle").addEventListener('change', function () {
     updateSettings();
   })
@@ -147,5 +155,6 @@
 <script>
   Window.onload = redirect();
   Window.onload = scanCookies();
+  Window.onload = loadSettings();
   Window.onload = updateSettings();
 </script>

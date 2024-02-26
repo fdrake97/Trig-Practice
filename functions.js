@@ -156,34 +156,35 @@ function scoreGen() {
 }
 
 function loadImage() {
+  if (getCookie('circle_toggle') == 'true'){return;}
   mask = 0b0000;
   if (getCookie('full_circle_toggle') == 'true') { mask = mask | 0b100; }
   mask = mask | degVsRad*2;
   if (getCookie('coordinate_toggle') == 'true') { mask = mask | 0b001; }
   console.log(mask);
   switch (mask) {
-    case 0b100:
+    case 0b101:
       document.getElementById('image').src = 'full_unit_circle_black_no_coords.svg';
       break;
-    case 0b101:
+    case 0b100:
       document.getElementById('image').src = 'full_unit_circle_black.svg';
       break;
-    case 0b110:
+    case 0b111:
       document.getElementById('image').src = 'full_unit_circle_rad_no_coords.svg';
       break;
-    case 0b111:
+    case 0b110:
       document.getElementById('image').src = 'full_unit_circle_rad.svg';
       break;
-    case 0b000:
+    case 0b001:
       document.getElementById('image').src = 'half_unit_circle_black_no_coords.svg';
       break;
-    case 0b001:
+    case 0b000:
       document.getElementById('image').src = 'half_unit_circle_black.svg';
       break;
-    case 0b010:
+    case 0b011:
       document.getElementById('image').src = 'half_unit_circle_rad_no_coords.svg';
       break;
-    case 0b011:
+    case 0b010:
       document.getElementById('image').src = 'half_unit_circle_rad.svg';
       break;
   }
