@@ -59,7 +59,7 @@ box + box {
 button {
   background-color: #181818;
   color: #fff;
-  //margin: 5px;
+  /*margin: 5px;*/
   padding: 8px 12px;
   border: none;
   cursor: pointer;
@@ -82,7 +82,7 @@ canvas {
 
 .navbar {
   overflow: hidden;
-  //background-color: #333;
+  /*background-color: #333;*/
   position: fixed;
   bottom: 0;
   width: 100%;
@@ -110,7 +110,7 @@ input{
 .toggle-container {
   position: relative;
   display: inline-block;
-  width: 60px;
+  width: 60px ;
   height: 30px;
 }
 
