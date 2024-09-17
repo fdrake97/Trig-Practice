@@ -58,3 +58,72 @@ app * {
   margin:auto;
   flex-shrink: 0;
 }
+
+.toggle-label {
+  padding: 0px 15px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  height: 30px;
+}
+
+.toggle-container {
+  position: relative;
+  display: inline-block;
+  width: 60px ;
+  min-width: 60px;
+  height: 30px;
+}
+
+.toggle-slider {
+  display: flex;
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #181818;
+  /* Black background for the slider */
+  border: 2px solid #61dafb;
+  /* Blue border color */
+  border-radius: 15px;
+  /* Round corners */
+  transition: 0.4s;
+}
+
+.toggle-input {
+  display: none;
+}
+
+.toggle-slider:before {
+  position: absolute;
+  content: "";
+  height: 22px;
+  width: 22px;
+  left: 2px;
+  bottom: 2px;
+  background-color: #61dafb;
+  /* White slider color */
+  border-radius: 50%;
+  /* Round slider */
+  transition: 0.4s;
+}
+
+input:checked+.toggle-slider {
+  background-color: #02555d;
+}
+
+
+.toggle-input:checked+.toggle-slider:before {
+  transform: translateX(30px);
+  /* Move the slider to the right when checked */
+}
+
+box {
+  display: flex;
+}
+
+box + box {
+  margin-top: 5px;
+}

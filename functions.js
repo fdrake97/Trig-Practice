@@ -50,8 +50,8 @@ function pause() {
 function unpause() {
   document.getElementById("app").style.display = "block";
   document.getElementById("pause").style.display = "none";
-  startTime += ((time() - pauseTime_) - penalty_);
-  questionTime += ((time() - pauseTime_) - penalty_);
+  startTime_ += ((time() - pauseTime_) - penalty_);
+  questionTime_ += ((time() - pauseTime_) - penalty_);
 
 };
 
@@ -100,8 +100,8 @@ function newQuestion() {
 };
 
 function generateQuestion() {
-  var questionNum_ = random(getCookie("full_circle") == "0" ? 9 : 17);
-  questionType_ = getCookie('type') == 'deg' ? 0 : getCookie('type') == 'rad' ? 1 : random(2);
+  var questionNum_ = random(getCookie("full_circle") == "1" ? 17 : 9);
+  questionType_ = getCookie('radDeg') == 'deg' ? 0 : getCookie('radDeg') == 'rad' ? 1 : random(2);
   var trigVar_ = random(2);
   question_ = (trigVar_ == 0 ? "sin " : "cos ") + sinArray_[questionNum_][questionType_];
   correctAnswer_ = sinArray_[(questionNum_ + trigVar_ * 4) % 16][2];
@@ -110,15 +110,16 @@ function generateQuestion() {
     addImage(
       (getCookie("fullCircle") == "1" ? 1 : 0) * 0b100 +
       questionType_ * 0b010 +
-      (getCookie("coords") == "1" ? 1 : 0)) * 0b001;
+      (getCookie("coords") == "1" ? 1 : 0) * 0b001);
   }
   questionTime_ = time();
 };
 
 function addImage(mask_) {
+  console.log(mask_);
   var maskStr_ = "";
   for (i = 0; i < 3; i++) {
-    maskStr_ += (mask_ % 2 == 0) ? "0" : "1";
+    maskStr_ = ((mask_ % 2 == 0) ? "0" : "1") + maskStr_;
     mask_ = mask_ >> 1;
   }
   console.log(maskStr_);
@@ -192,3 +193,13 @@ function getCookie(cookieName_) {
   console.log("Failed to find cookie " + cookieName_);
   return "";
 };
+
+function updateSettings() {
+  startTime_ = time() - penalty_;
+  questionTime_ = startTime_;
+  setCookie('fullCircle', document.getElementById("full_circle_toggle").checked ? "1" : "0");
+  setCookie('radDeg', document.getElementById("degree_toggle").checked ? document.getElementById("radian_toggle").checked ? "degRad" : "deg" : "rad");
+  setCookie('image', document.getElementById("circle_toggle").checked ? "0" : "1");
+  setCookie('coords', document.getElementById("coordinate_toggle").checked ? "0" : "1");
+  newQuestion();
+}
