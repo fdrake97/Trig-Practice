@@ -149,10 +149,10 @@ function updateStats() {
   if (getCookie("highscore") == "") { setCookie("highscore", "0"); }
   document.getElementById("highscore").innerText = Math.trunc(parseInt(getCookie("highscore")));
   document.getElementById("score").innerText = Math.trunc(score_);
-  document.getElementById("avgTime").innerText = ((time() - startTime_) / 1000) / answered_;
+  document.getElementById("avgTime").innerText = Math.trunc(((time() - startTime_) / 1000) / answered_);
   document.getElementById("highscore1").innerText = Math.trunc(parseInt(getCookie("highscore")));
   document.getElementById("score1").innerText = Math.trunc(score_);
-  document.getElementById("avgTime1").innerText = ((time() - startTime_) / 1000) / answered_;
+  document.getElementById("avgTime1").innerText = Math.trunc(((time() - startTime_) / 1000) / answered_);
   console.log((time() - startTime_) / 1000);
 }
 
