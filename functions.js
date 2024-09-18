@@ -39,7 +39,7 @@ function toggleSettings() {
   if (viewSettings_) {
     x.style.transform = "translate3d(0,0,0)";
   } else {
-    x.style.transform = "translate3d(30vw,0,0)";
+    x.style.transform = "translate3d(350px,0,0)";
   }
 };
 
