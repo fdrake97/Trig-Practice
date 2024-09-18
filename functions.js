@@ -33,6 +33,13 @@ var viewSettings_ = false;
 let questionNum_;
 let questionType_;
 
+function cookieDialog() {
+  if (getCookie("acceptCookies") != "true") {
+    alert("This game requires cookies. Click ok to accept.");
+    setCookie("acceptCookies", "true");
+  }
+}
+
 function toggleSettings() {
   var x = document.getElementById("settings");
   viewSettings_ = !viewSettings_;
@@ -58,15 +65,16 @@ function unpause() {
 };
 
 function checkAnswer() {
-  answer = (document.getElementById("answer").value.toLowerCase().trim());
+  answer_ = (document.getElementById("answer").value.toLowerCase().trim());
   if (!isAnswerOption(answer_)) { notAnAnswerOption(); return; }
   answered_++;
   passedTime_ = time() - questionTime_;
   if (answer_ == correctAnswer_) { isCorrectAnswer(); }
   else { incorrectAnswer(); }
 
-  console.log(answer_);
-  console.log(correctAnswer_);
+  console.log("User answer:    "+answer_);
+  console.log("Correct answer: "+correctAnswer_);
+  document.getElementById("answer").value = "";
   newQuestion();
 };
 
@@ -102,7 +110,7 @@ function newQuestion() {
 };
 
 function generateQuestion() {
-  var questionNum_ = random(getCookie("full_circle") == "1" ? 17 : 9);
+  var questionNum_ = random(getCookie("fullCircle") == "1" ? 17 : 9);
   questionType_ = getCookie('radDeg') == 'deg' ? 0 : getCookie('radDeg') == 'rad' ? 1 : random(2);
   var trigVar_ = random(2);
   question_ = (trigVar_ == 0 ? "sin " : "cos ") + sinArray_[questionNum_][questionType_];
@@ -118,14 +126,12 @@ function generateQuestion() {
 };
 
 function addImage(mask_) {
-  console.log(mask_);
   var maskStr_ = "";
   for (i = 0; i < 3; i++) {
     maskStr_ = ((mask_ % 2 == 0) ? "0" : "1") + maskStr_;
     mask_ = mask_ >> 1;
   }
-  console.log(maskStr_);
-  document.getElementById("0b"+maskStr_).style.display = "block";
+  document.getElementById("0b" + maskStr_).style.display = "block";
 }
 
 function clearImage() {
@@ -155,9 +161,7 @@ function random(number_) {
 };
 
 function logTime(input_) {
-  console.log("logging " + input_);
   times_ += (input_ + " ");
-  console.log(parseInt(getCookie("highscore")));
   if (score_ > parseInt(getCookie("highscore"))) {
     setCookie("highscore", score_);
     setCookie("bestGame", times_);
@@ -182,7 +186,6 @@ function getCookie(cookieName_) {
   let name_ = cookieName_ + "=";
   let decodedCookie_ = decodeURIComponent(document.cookie);
   let cookieArray_ = decodedCookie_.split(';');
-  console.log(cookieArray_);
   for (let i = 0; i < cookieArray_.length; i++) {
     let cookieElement_ = cookieArray_[i];
     while (cookieElement_.charAt(0) == ' ') {

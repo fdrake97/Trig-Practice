@@ -120,12 +120,13 @@
     <a href="./welcome.html"><button>Start</button></a>
   -->
   </div>
-  <p style="margin: 10px; position: fixed; bottom: 0; left: 0;">v1.2.9</p>
+  <p style="margin: 10px; position: fixed; bottom: 0; left: 0;">v1.2.10</p>
   <button style="margin: 10px; position: fixed; bottom: 0; right: 0;" onclick="toggleSettings();">Options</button>
 </body>
 
 <script>
   Window.onload = newQuestion();
+  Window.onload = cookieDialog();
 
   document.getElementById("degree_toggle").addEventListener('change', function () {
     if (!document.getElementById("degree_toggle").checked) {
