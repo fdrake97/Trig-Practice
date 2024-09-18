@@ -29,15 +29,17 @@ var answer_ = 0;
 var answered_ = 0;
 var score_ = 0;
 var streak_ = 0;
+var viewSettings_ = false;
 let questionNum_;
 let questionType_;
 
 function toggleSettings() {
   var x = document.getElementById("settings");
-  if (x.style.display === "none") {
-    x.style.display = "block";
+  viewSettings_ = !viewSettings_;
+  if (viewSettings_) {
+    x.style.transform = "translate3d(0,0,0)";
   } else {
-    x.style.display = "none";
+    x.style.transform = "translate3d(30vw,0,0)";
   }
 };
 
@@ -110,7 +112,7 @@ function generateQuestion() {
     addImage(
       (getCookie("fullCircle") == "1" ? 1 : 0) * 0b100 +
       questionType_ * 0b010 +
-      (getCookie("coords") == "1" ? 1 : 0) * 0b001);
+      (getCookie("coords") == "0" ? 0 : 1) * 0b001);
   }
   questionTime_ = time();
 };

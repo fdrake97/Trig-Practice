@@ -122,8 +122,13 @@ input:checked+.toggle-slider {
 
 box {
   display: flex;
+  margin: 10px;
 }
 
 box + box {
   margin-top: 5px;
+}
+
+h1 {
+  margin: 10px;
 }
