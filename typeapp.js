@@ -79,13 +79,8 @@ function unpause() {
 function submitScore() {
   if (getCookie("submitted") != "True") {
     let id = "1FAIpQLSe5enqs4AS0p_S3E4bpqSIa1d5FH4WKwk3VBMYWlv9m7XTLXQ";
-    //var dat = { "entry.529474552": "data1", "entry.1066559787": "name1" };
 
     $.ajax({
-      /*beforeSend: function (xhr) {
-        xhr.setRequestHeader('Access-Control-Allow-Origin', 'chrome-extension://EXTENSION_ID');
-        xhr.setRequestHeader('Access-Control-Allow-Methods', 'GET, POST, PUT');
-      },*/
       url: "https://docs.google.com/forms/d/e/" + id + "/formResponse",
       data: {
         "entry.221510820": getCookie("name"),
