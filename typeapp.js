@@ -30,6 +30,7 @@ var answered_ = 0;
 var score_ = 0;
 var streak_ = 0;
 var viewSettings_ = false;
+var viewLeaderboard_ = false;
 let questionNum_;
 let questionType_;
 
@@ -50,6 +51,16 @@ function toggleSettings() {
   }
 };
 
+function toggleLeaderboard() {
+  var x = document.getElementById("leaderboard");
+  viewLeaderboard_ = !viewLeaderboard_;
+  if (viewLeaderboard_) {
+    x.style.transform = "translate3d(0,0,0)";
+  } else {
+    x.style.transform = "translate3d(500px,0,0)";
+  }
+};
+
 function pause() {
   document.getElementById("app").style.display = "none";
   document.getElementById("pause").style.display = "block";
@@ -61,8 +72,44 @@ function unpause() {
   document.getElementById("pause").style.display = "none";
   startTime_ += ((time() - pauseTime_) - penalty_);
   questionTime_ += ((time() - pauseTime_) - penalty_);
-
 };
+
+//usp=pp_url&entry.221510820=Name&entry.533647486=Format&entry.951457233=Result
+
+function submitScore() {
+  if (getCookie("submitted") != "True") {
+    let id = "1FAIpQLSe5enqs4AS0p_S3E4bpqSIa1d5FH4WKwk3VBMYWlv9m7XTLXQ";
+    //var dat = { "entry.529474552": "data1", "entry.1066559787": "name1" };
+
+    $.ajax({
+      /*beforeSend: function (xhr) {
+        xhr.setRequestHeader('Access-Control-Allow-Origin', 'chrome-extension://EXTENSION_ID');
+        xhr.setRequestHeader('Access-Control-Allow-Methods', 'GET, POST, PUT');
+      },*/
+      url: "https://docs.google.com/forms/d/e/" + id + "/formResponse",
+      data: {
+        "entry.221510820": getCookie("name"),
+        "entry.533647486": (getCookie("radDeg") + " " + (getCookie("image") == "0" ? "noimage" : (getCookie("coords") == "0" ? "blank" : "coords"))),
+        "entry.951457233": getCookie("bestGame")
+      },
+      type: "POST",
+      dataType: "json",
+      //xhrFields: { withCredentials: true },
+      statusCode: {
+        0: function () { console.log("OK") },
+        200: function () { console.log("error") },
+      }
+    });
+    setCookie("submitted", "True");
+  }
+  confetti({
+    angle: 90,
+    spread: 360,
+    particleCount: 1000,
+    startVelocity: 10,
+    origin: { x: (window.event.clientX / screen.width), y: (window.event.clientY / screen.height) },
+  });
+}
 
 function checkAnswer() {
   answer_ = (document.getElementById("answer").value.toLowerCase().trim());
@@ -72,11 +119,23 @@ function checkAnswer() {
   if (answer_ == correctAnswer_) { isCorrectAnswer(); }
   else { incorrectAnswer(); }
 
-  console.log("User answer:    "+answer_);
-  console.log("Correct answer: "+correctAnswer_);
+  console.log("User answer:    " + answer_);
+  console.log("Correct answer: " + correctAnswer_);
   document.getElementById("answer").value = "";
   newQuestion();
 };
+
+function setupName() {
+  if (getCookie("name") == "") {
+    setCookie("name", "Guest");
+  }
+  document.getElementById("nameplate").innerHTML = "Your name: " + getCookie("name");
+}
+
+function submitName() {
+  setCookie("name", document.getElementById("name").value.trim());
+  document.getElementById("nameplate").innerHTML = "Your name: " + getCookie("name");
+}
 
 function isAnswerOption(answer_) {
   for (x = 0; x < 16; x++) {
@@ -89,7 +148,8 @@ function isCorrectAnswer() {
   streak_++;
   score_ = (score_ * 0.95 + 100000 / passedTime_ * (1 + (streak_ / 10)));
   logTime(passedTime_);
-  document.getElementById("result").innerText = "Correct! Well done!";
+  if (streak_ < 4) { document.getElementById("result").innerText = "Correct! Well done!"; }
+  else { document.getElementById("result").innerText = "Current streak multiplier: " + (1 + streak_ / 10) + "x"; }
 };
 
 function incorrectAnswer() {
@@ -149,10 +209,10 @@ function updateStats() {
   if (getCookie("highscore") == "") { setCookie("highscore", "0"); }
   document.getElementById("highscore").innerText = Math.trunc(parseInt(getCookie("highscore")));
   document.getElementById("score").innerText = Math.trunc(score_);
-  document.getElementById("avgTime").innerText = ((time() - startTime_) / 1000) / answered_;
-  document.getElementById("highscore1").innerText = Math.trunc(parseInt(getCookie("highscore")));
-  document.getElementById("score1").innerText = Math.trunc(score_);
-  document.getElementById("avgTime1").innerText = ((time() - startTime_) / 1000) / answered_;
+  document.getElementById("avgTime").innerText = Math.trunc(((time() - startTime_) / 1000) / answered_ * 10) / 10;
+  document.getElementById("highscore1").innerText = document.getElementById("highscore").innerText;
+  document.getElementById("score1").innerText = document.getElementById("score").innerText;
+  document.getElementById("avgTime1").innerText = document.getElementById("avgTime").innerText;
   console.log((time() - startTime_) / 1000);
 }
 
@@ -165,6 +225,7 @@ function logTime(input_) {
   if (score_ > parseInt(getCookie("highscore"))) {
     setCookie("highscore", score_);
     setCookie("bestGame", times_);
+    setCookie("submitted", "False");
     console.log("logged " + times_);
   }
 };

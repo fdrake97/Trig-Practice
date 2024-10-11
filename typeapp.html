@@ -10,7 +10,10 @@
   </style>
 </head>
 
-<script type="text/javascript" src="./functions.js"></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js'></script>
+<script type="text/javascript" src="./typeapp.js"></script>
+<script type="text/javascript"
+  src="https://cdn.jsdelivr.net/npm/@tsparticles/confetti@3.0.3/tsparticles.confetti.bundle.min.js"></script>
 
 <body style="display: flex;">
   <app id="app" style="flex-basis:100%; justify-content: center;">
@@ -35,6 +38,7 @@
     </div>
     <div style="display:flex; justify-content: center;">
       <button style="margin: 10px;" onclick="pause();">Pause</button>
+      <button style="margin: 10px;" onclick="submitScore();">Submit score</button>
     </div>
     <div style="width:50%; flex-shrink: 0; min-width: 300px;"><img id="0b100"
         src="full_unit_circle_black_no_coords.svg"></img></div>
@@ -72,7 +76,7 @@
       <button style="margin: 10px;" onclick="unpause();">Unpause</button>
     </div>
   </app>
-  <div id="settings" style="position: fixed; top: 0; right: 0; transform: translate3d(350px,0,0); width: 300px; background-color: #202020; border: 4px solid #303030; border-radius: 10px; margin: 20px; transition: transform .5s">
+  <div class="options" id="settings">
     <h1>Options</h1>
     <box>
       <label class="toggle-container">
@@ -109,6 +113,13 @@
       </label>
       <label class="toggle-label">Hide coordinates</label>
     </box>
+    <box><label id="nameplate">Your name: OOPS</label></box>
+    <box>
+      <form onsubmit="event.preventDefault(); submitName();">
+        <input type="text" id="name" placeholder="Your name" autocomplete="off">
+      </form>
+    </box>
+    <box><label>v1.3.1</label></box>
     <!--
     <br>
     Change name:
@@ -120,13 +131,22 @@
     <a href="./welcome.html"><button>Start</button></a>
   -->
   </div>
-  <p style="margin: 10px; position: fixed; bottom: 0; left: 0;">v1.2.10</p>
-  <button style="margin: 10px; position: fixed; bottom: 0; right: 0;" onclick="toggleSettings();">Options</button>
+  <div class="board" id="leaderboard">
+    <iframe style="width: 450px; height: 470px;"
+      src="https://docs.google.com/spreadsheets/d/e/2PACX-1vRGaBPGLDT_jlGHDBRO7ijJ73KAwVwzQ2W38gxpBb4oKwvpUyw-nXN2K1EMM847G8ioyZ2jHirQgffQ/pubhtml?gid=2147011939&amp;single=true&amp;widget=true&amp;headers=false"></iframe>
+    <!--<a href="https://docs.google.com/spreadsheets/d/e/2PACX-1vRGaBPGLDT_jlGHDBRO7ijJ73KAwVwzQ2W38gxpBb4oKwvpUyw-nXN2K1EMM847G8ioyZ2jHirQgffQ/pubhtml?gid=2147011939&single=true">Leaderboard also found here</a>-->
+  </div>
+  <div style="margin: 10px; position: fixed; bottom: 0; right: 0;">
+    <button onclick="toggleSettings();">Options</button>
+    <button onclick="toggleLeaderboard();">Leaderboard</button>
+  </div>
 </body>
 
 <script>
-  Window.onload = newQuestion();
   Window.onload = cookieDialog();
+  Window.onload = setupName();
+  Window.onload = updateSettings();
+  Window.onload = newQuestion();
 
   document.getElementById("degree_toggle").addEventListener('change', function () {
     if (!document.getElementById("degree_toggle").checked) {
