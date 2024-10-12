@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Trig Practice</title>
+  <link rel="icon" type="image/x-icon" href="./faviconV2.ico">
+  <link rel="stylesheet" href="./style.css">
+  </style>
+</head>
+
+<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js'></script>
+<script type="text/javascript" src="./typeapp.js"></script>
+<script type="text/javascript"
+  src="https://cdn.jsdelivr.net/npm/@tsparticles/confetti@3.0.3/tsparticles.confetti.bundle.min.js"></script>
+
+<body style="display: flex;">
+  <app id="app" style="flex-basis:100%; justify-content: center;">
+    <div id="question-box" style="flex: 1 1 100%">
+      <div id="question">hmmm.. something seems to be wrong.</div>
+      <form onsubmit="event.preventDefault(); checkAnswer();">
+        <input type="text" id="answer" placeholder="Your answer" autocomplete="off" autofocus>
+      </form>
+      <div class='label' id="result"></div>
+    </div>
+    <div style="width: 200px; padding: 20px;">
+      <div style="float: right; text-align:right;">
+        <p id="highscore">err</p>
+        <p id="score">err</p>
+        <p id="avgTime">err</p>
+      </div>
+      <div>
+        <p>Highscore </p>
+        <p>Score </p>
+        <p>Avg.time </p>
+      </div>
+    </div>
+    <div style="display:flex; justify-content: center;">
+      <button style="margin: 10px;" onclick="pause();">Pause</button>
+      <button style="margin: 10px;" onclick="submitScore();">Submit score</button>
+    </div>
+    <div style="width:50%; flex-shrink: 0; min-width: 300px;"><img id="0b100"
+        src="full_unit_circle_black_no_coords.svg"></img></div>
+    <div style="width:50%; flex-shrink: 0; min-width: 300px;"><img id="0b101" src="full_unit_circle_black.svg"></img>
+    </div>
+    <div style="width:50%; flex-shrink: 0; min-width: 300px;"><img id="0b110"
+        src="full_unit_circle_rad_no_coords.svg"></img></div>
+    <div style="width:50%; flex-shrink: 0; min-width: 300px;"><img id="0b111" src="full_unit_circle_rad.svg"></img>
+    </div>
+    <div style="width:50%; flex-shrink: 0; min-width: 300px;"><img id="0b000"
+        src="half_unit_circle_black_no_coords.svg"></img></div>
+    <div style="width:50%; flex-shrink: 0; min-width: 300px;"><img id="0b001" src="half_unit_circle_black.svg"></img>
+    </div>
+    <div style="width:50%; flex-shrink: 0; min-width: 300px;"><img id="0b010"
+        src="half_unit_circle_rad_no_coords.svg"></img></div>
+    <div style="width:50%; flex-shrink: 0; min-width: 300px;"><img id="0b011" src="half_unit_circle_rad.svg"></img>
+    </div>
+  </app>
+  <app id="pause" style="display: none; flex-basis: 100%;">
+
+    <h1 style="text-align: center; padding: 50px;">Paused</h1>
+    <div style="width: 200px">
+      <div style="float: right; text-align:right;">
+        <p id="highscore1">err</p>
+        <p id="score1">err</p>
+        <p id="avgTime1">err</p>
+      </div>
+      <div>
+        <p>Highscore: </p>
+        <p>Score: </p>
+        <p>Avg.time: </p>
+      </div>
+    </div>
+    <div style="display:flex; justify-content: center;">
+      <button style="margin: 10px;" onclick="unpause();">Unpause</button>
+    </div>
+  </app>
+  <div class="options" id="settings">
+    <h1>Options</h1>
+    <box>
+      <label class="toggle-container">
+        <input type="checkbox" class="toggle-input" id="full_circle_toggle">
+        <span class="toggle-slider"></span>
+      </label>
+      <label class="toggle-label">Full circle</text>
+    </box>
+    <box>
+      <label class="toggle-container">
+        <input type="checkbox" class="toggle-input" id="degree_toggle" checked>
+        <span class="toggle-slider"></span>
+      </label>
+      <label class="toggle-label">Degrees</label>
+    </box>
+    <box>
+      <label class="toggle-container">
+        <input type="checkbox" class="toggle-input" id="radian_toggle" checked>
+        <span class="toggle-slider"></span>
+      </label>
+      <label class="toggle-label">Radians</label>
+    </box>
+    <box>
+      <label class="toggle-container">
+        <input type="checkbox" class="toggle-input" id="circle_toggle">
+        <span class="toggle-slider"></span>
+      </label>
+      <label class="toggle-label">Hide circle</label>
+    </box>
+    <box>
+      <label class="toggle-container">
+        <input type="checkbox" class="toggle-input" id="coordinate_toggle">
+        <span class="toggle-slider"></span>
+      </label>
+      <label class="toggle-label">Hide coordinates</label>
+    </box>
+    <box><label id="nameplate">Your name: OOPS</label></box>
+    <box>
+      <form onsubmit="event.preventDefault(); submitName();">
+        <input type="text" id="name" placeholder="Your name" autocomplete="off">
+      </form>
+    </box>
+    <box><label>v1.3.1</label></box>
+    <!--
+    <br>
+    Change name:
+    <form onsubmit="submitName(); return false;">
+      <input class="label" type="text" id="userName" placeholder="Your name here" autocomplete="off" autofocus>
+    </form>
+    (Hit 'Enter' to submit)
+    <br>
+    <a href="./welcome.html"><button>Start</button></a>
+  -->
+  </div>
+  <div class="board" id="leaderboard">
+    <iframe style="width: 450px; height: 470px;"
+      src="https://docs.google.com/spreadsheets/d/e/2PACX-1vRGaBPGLDT_jlGHDBRO7ijJ73KAwVwzQ2W38gxpBb4oKwvpUyw-nXN2K1EMM847G8ioyZ2jHirQgffQ/pubhtml?gid=2147011939&amp;single=true&amp;widget=true&amp;headers=false"></iframe>
+    <!--<a href="https://docs.google.com/spreadsheets/d/e/2PACX-1vRGaBPGLDT_jlGHDBRO7ijJ73KAwVwzQ2W38gxpBb4oKwvpUyw-nXN2K1EMM847G8ioyZ2jHirQgffQ/pubhtml?gid=2147011939&single=true">Leaderboard also found here</a>-->
+  </div>
+  <div style="margin: 10px; position: fixed; bottom: 0; right: 0;">
+    <button onclick="toggleSettings();">Options</button>
+    <button onclick="toggleLeaderboard();">Leaderboard</button>
+  </div>
+</body>
+
+<script>
+  Window.onload = cookieDialog();
+  Window.onload = setupName();
+  Window.onload = updateSettings();
+  Window.onload = newQuestion();
+
+  document.getElementById("degree_toggle").addEventListener('change', function () {
+    if (!document.getElementById("degree_toggle").checked) {
+      document.getElementById("radian_toggle").checked = true
+    }
+  })
+
+  document.getElementById("radian_toggle").addEventListener('change', function () {
+    if (!document.getElementById("radian_toggle").checked) {
+      document.getElementById("degree_toggle").checked = true
+    }
+  })
+
+  document.getElementById("circle_toggle").addEventListener('change', function () {
+    if (document.getElementById("circle_toggle").checked) {
+      document.getElementById("coordinate_toggle").checked = true
+    }
+  })
+
+  document.getElementById("coordinate_toggle").addEventListener('change', function () {
+    if (!document.getElementById("coordinate_toggle").checked) {
+      document.getElementById("circle_toggle").checked = false
+    }
+  })
+
+  document.getElementById("full_circle_toggle").addEventListener('change', function () {
+    updateSettings();
+  })
+
+  document.getElementById("degree_toggle").addEventListener('change', function () {
+    updateSettings();
+  })
+
+  document.getElementById("radian_toggle").addEventListener('change', function () {
+    updateSettings();
+  })
+
+  document.getElementById("circle_toggle").addEventListener('change', function () {
+    updateSettings();
+  })
+
+  document.getElementById("coordinate_toggle").addEventListener('change', function () {
+    updateSettings();
+  })
+
+</script>
