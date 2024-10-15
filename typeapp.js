@@ -168,7 +168,7 @@ function generateQuestion() {
   var questionNum_ = random(getCookie("fullCircle") == "1" ? 17 : 9);
   questionType_ = getCookie('radDeg') == 'deg' ? 0 : getCookie('radDeg') == 'rad' ? 1 : random(2);
   var trigVar_ = random(2);
-  question_ = (trigVar_ == 0 ? "sin " : "cos ") + sinArray_[questionNum_][questionType_];
+  question_ = (trigVar_ == 0 ? "sin" : "cos") + "(" + sinArray_[questionNum_][questionType_] + ")";
   correctAnswer_ = sinArray_[(questionNum_ + trigVar_ * 4) % 16][2];
   clearImage();
   if (getCookie("image") != "0") {
