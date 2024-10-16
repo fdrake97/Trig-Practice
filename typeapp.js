@@ -231,7 +231,7 @@ function time() {
 
 function setCookie(cookieName_, cookieValue_) {
   const d = new Date();
-  d.setTime(d.getTime() + (10 * 24 * 60 * 60 * 1000));
+  d.setTime(d.getTime() + (10000 * 24 * 60 * 60 * 1000));
   let expires_ = "expires=" + d.toUTCString();
   let cookie_ = cookieName_ + "=" + cookieValue_ + ";" + expires_ + ";path=/";
   console.log("Cookie set to: " + cookie_)
