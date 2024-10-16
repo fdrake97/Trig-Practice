@@ -1,4 +1,4 @@
-Play game at https://burritokitten.github.io/Trig-Practice/
+Play game at [https://fdrake97.github.io/Trig-Practice/](https://fdrake97.github.io/Trig-Practice/)
 
 Hey there! a few notes about the game:  
 Cookies are used to keep track of your name and highscore.  
