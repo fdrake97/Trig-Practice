@@ -130,6 +130,7 @@
     <br>
     <a href="./welcome.html"><button>Start</button></a>
   -->
+
   </div>
   <div class="board" id="leaderboard">
     <iframe style="width: 450px; height: 470px;"
@@ -138,11 +139,11 @@
   </div>
   <div style="margin: 10px; position: fixed; bottom: 0; right: 0;">
     <button onclick="toggleSettings();">Options</button>
-    <button onclick="toggleLeaderboard();">Leaderboard</button>
+    <button onclick="toggleLeaderboard();" onmouseover="refreshLeaderboard()">Leaderboard</button>
   </div>
 </body>
 
-<script>
+<script type="text/javascript">
   Window.onload = cookieDialog();
   Window.onload = setupName();
   Window.onload = updateSettings();
