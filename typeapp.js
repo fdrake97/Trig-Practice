@@ -61,6 +61,12 @@ function toggleLeaderboard() {
   }
 };
 
+function refreshLeaderboard() {
+  if (!viewLeaderboard_) {
+    document.getElementById("leaderboard").innerHTML = '<iframe style="width: 450px; height: 470px;"src="https://docs.google.com/spreadsheets/d/e/2PACX-1vRGaBPGLDT_jlGHDBRO7ijJ73KAwVwzQ2W38gxpBb4oKwvpUyw-nXN2K1EMM847G8ioyZ2jHirQgffQ/pubhtml?gid=2147011939&amp;single=true&amp;widget=true&amp;headers=false"></iframe>';
+  }
+}
+
 function pause() {
   document.getElementById("app").style.display = "none";
   document.getElementById("pause").style.display = "block";
@@ -234,7 +240,7 @@ function setCookie(cookieName_, cookieValue_) {
   d.setTime(d.getTime() + (10000 * 24 * 60 * 60 * 1000));
   let expires_ = "expires=" + d.toUTCString();
   let cookie_ = cookieName_ + "=" + cookieValue_ + ";" + expires_ + ";path=/";
-  console.log("Cookie set to: " + cookie_)
+  console.log("Cookie set to: " + cookie_);
   document.cookie = cookie_;
 };
 
