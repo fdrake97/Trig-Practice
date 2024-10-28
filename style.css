@@ -158,8 +158,8 @@ h1 {
   display: block;
   position: fixed;
   top: 0;
-  right: 0;
-  transform: translate3d(700px, 0, 0);
+  left: 0;
+  transform: translate3d(-500px, 0, 0);
   background-color: #202020;
   border: 4px solid #303030;
   border-radius: 10px;
@@ -169,8 +169,8 @@ h1 {
   -moz-transition: transform .5s;
   -ms-transition: transform .5s;
   -o-transition: transform .5s;
-  -webkit-transform: translate3d(700px, 0, 0);
-  -moz-transform: translate3d(700px, 0, 0);
-  -ms-transform: translate3d(700px, 0, 0);
-  -o-transform: translate3d(700px, 0, 0);
+  -webkit-transform: translate3d(-500px, 0, 0);
+  -moz-transform: translate3d(-500px, 0, 0);
+  -ms-transform: translate3d(-500px, 0, 0);
+  -o-transform: translate3d(-500px, 0, 0);
 }

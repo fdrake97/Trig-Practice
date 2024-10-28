@@ -57,7 +57,7 @@ function toggleLeaderboard() {
   if (viewLeaderboard_) {
     x.style.transform = "translate3d(0,0,0)";
   } else {
-    x.style.transform = "translate3d(500px,0,0)";
+    x.style.transform = "translate3d(-500px,0,0)";
   }
 };
 
@@ -172,7 +172,7 @@ function newQuestion() {
 
 function generateQuestion() {
   var questionNum_ = random(getCookie("fullCircle") == "1" ? 17 : 9);
-  questionType_ = getCookie('radDeg') == 'deg' ? 0 : getCookie('radDeg') == 'rad' ? 1 : random(2);
+  questionType_ = getCookie('radDeg') == 'deg' ? 0 : getCookie('radDeg') != 'rad' ? random(2) : 1;
   var trigVar_ = random(2);
   question_ = (trigVar_ == 0 ? "sin" : "cos") + "(" + sinArray_[questionNum_][questionType_] + ")";
   correctAnswer_ = sinArray_[(questionNum_ + trigVar_ * 4) % 16][2];
