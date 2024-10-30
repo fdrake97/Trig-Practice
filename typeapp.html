@@ -144,10 +144,7 @@
 </body>
 
 <script type="text/javascript">
-  Window.onload = cookieDialog();
-  Window.onload = setupName();
-  Window.onload = updateSettings();
-  Window.onload = newQuestion();
+  Window.onload = init();
 
   document.getElementById("degree_toggle").addEventListener('change', function () {
     if (!document.getElementById("degree_toggle").checked) {
