@@ -55,6 +55,7 @@ function init() {
 
   cookieDialog();
   setupName();
+  restoreSettings();
   updateSettings();
   newQuestion();
 }
@@ -299,6 +300,15 @@ function updateSettings() {
   setCookie('coords', document.getElementById("coordinate_toggle").checked ? "0" : "1");
   newQuestion();
   multiplier_ = 1 + (getCookie("radDeg").includes("rad") ? 0.5 : 0) + (getCookie("radDeg").includes("degRad") ? 0.5 : 0) + (getCookie("fullCircle") === "1" ? 0.5 : 0) + (getCookie("image") === "0" ? 0.5 : 0);
+}
+
+function restoreSettings() {
+  console.log(document.cookie);
+  document.getElementById("full_circle_toggle").checked = (getCookie("fullCircle").includes("1"));
+  document.getElementById("radian_toggle").checked = (getCookie("radDeg").toLowerCase().includes("rad"));
+  document.getElementById("degree_toggle").checked = (!getCookie("radDeg").includes("rad") || getCookie("radDeg").includes("degRad"));
+  document.getElementById("circle_toggle").checked = (getCookie("image").includes("0"));
+  document.getElementById("coordinate_toggle").checked = (getCookie("coords").includes("0")); 
 }
 
 init();
