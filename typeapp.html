@@ -119,7 +119,7 @@
         <input type="text" id="name" placeholder="Your name" autocomplete="off">
       </form>
     </box>
-    <box><label>v1.3.2</label></box>
+    <box><label>v1.3.3</label></box>
     <!--
     <br>
     Change name:
@@ -144,11 +144,7 @@
 </body>
 
 <script type="text/javascript">
-  Window.onload = cookieDialog();
-  Window.onload = setupName();
-  Window.onload = restoreSettings();
-  Window.onload = updateSettings();
-  Window.onload = newQuestion();
+  Window.onload = init();
 
   document.getElementById("degree_toggle").addEventListener('change', function () {
     if (!document.getElementById("degree_toggle").checked) {

@@ -27,12 +27,37 @@ var times_ = "";
 var question_ = "An error has occurred";
 var answer_ = 0;
 var answered_ = 0;
+var correct_ = 0;
 var score_ = 0;
 var streak_ = 0;
 var viewSettings_ = false;
 var viewLeaderboard_ = false;
+var multiplier_ = 1;
 let questionNum_;
 let questionType_;
+
+function init() {
+  startTime_ = time();
+  questionTime_ = 0;
+  pauseTime_ = 0;
+  passedTime_ = 0;
+  correctAnswer_;
+  times_ = "";
+  question_ = "An error has occurred";
+  answer_ = 0;
+  answered_ = 0;
+  correct_ = 0;
+  score_ = 0;
+  streak_ = 0;
+  viewSettings_ = false;
+  viewLeaderboard_ = false;
+  multiplier_ = 1;
+
+  cookieDialog();
+  setupName();
+  restoreSettings();
+  newQuestion();
+}
 
 function cookieDialog() {
   if (getCookie("acceptCookies") != "true") {
@@ -83,6 +108,7 @@ function unpause() {
 //usp=pp_url&entry.221510820=Name&entry.533647486=Format&entry.951457233=Result
 
 function submitScore() {
+  submitName();
   if (getCookie("submitted") != "True") {
     let id = "1FAIpQLSe5enqs4AS0p_S3E4bpqSIa1d5FH4WKwk3VBMYWlv9m7XTLXQ";
 
@@ -90,7 +116,7 @@ function submitScore() {
       url: "https://docs.google.com/forms/d/e/" + id + "/formResponse",
       data: {
         "entry.221510820": getCookie("name"),
-        "entry.533647486": (getCookie("radDeg") + " " + (getCookie("image") == "0" ? "noimage" : (getCookie("coords") == "0" ? "blank" : "coords"))),
+        "entry.533647486": (getCookie("radDeg") + " " + (getCookie("image") == "0" ? "noimage" : "image") + " " + (getCookie("fullCircle") == "1" ? "full" : "half")),
         "entry.951457233": getCookie("bestGame")
       },
       type: "POST",
@@ -134,8 +160,10 @@ function setupName() {
 }
 
 function submitName() {
-  setCookie("name", document.getElementById("name").value.trim());
-  document.getElementById("nameplate").innerHTML = "Your name: " + getCookie("name");
+  var name = document.getElementById("name").value.trim();
+  if (name === "") { name = "Guest"; }
+  setCookie("name", name);
+  document.getElementById("nameplate").innerHTML = "Your name: " + name;
 }
 
 function isAnswerOption(answer_) {
@@ -147,7 +175,8 @@ function isAnswerOption(answer_) {
 
 function isCorrectAnswer() {
   streak_++;
-  score_ = (score_ * 0.95 + 100000 / passedTime_ * (1 + (streak_ / 10)));
+  correct_++;
+  score_ = (score_ * 0.95 + 100000 / passedTime_ * (1 + (streak_ / 10)) * multiplier_);
   logTime(passedTime_);
   if (streak_ < 4) { document.getElementById("result").innerText = "Correct! Well done!"; }
   else { document.getElementById("result").innerText = "Current streak multiplier: " + (1 + streak_ / 10) + "x"; }
@@ -210,7 +239,7 @@ function updateStats() {
   if (getCookie("highscore") == "") { setCookie("highscore", "0"); }
   document.getElementById("highscore").innerText = Math.trunc(parseInt(getCookie("highscore")));
   document.getElementById("score").innerText = Math.trunc(score_);
-  document.getElementById("avgTime").innerText = Math.trunc(((time() - startTime_) / 1000) / answered_);
+  document.getElementById("avgTime").innerText = Math.trunc(((time() - startTime_) / 1000) / correct_);
   document.getElementById("highscore1").innerText = Math.trunc(parseInt(getCookie("highscore")));
   document.getElementById("score1").innerText = Math.trunc(score_);
   document.getElementById("avgTime1").innerText = Math.trunc(((time() - startTime_) / 1000) / answered_);
@@ -268,7 +297,8 @@ function updateSettings() {
   setCookie('radDeg', document.getElementById("degree_toggle").checked ? document.getElementById("radian_toggle").checked ? "degRad" : "deg" : "rad");
   setCookie('image', document.getElementById("circle_toggle").checked ? "0" : "1");
   setCookie('coords', document.getElementById("coordinate_toggle").checked ? "0" : "1");
-  newQuestion();
+  init();
+  multiplier_ = 1 + (getCookie("radDeg").includes("rad") ? 0.5 : 0) + (getCookie("radDeg").includes("degRad") ? 0.5 : 0) + (getCookie("fullCircle") === "1" ? 0.5 : 0) + (getCookie("image") === "0" ? 0.5 : 0);
 }
 
 function restoreSettings() {
@@ -277,5 +307,7 @@ function restoreSettings() {
   document.getElementById("radian_toggle").checked = (getCookie("radDeg").toLowerCase().includes("rad"));
   document.getElementById("degree_toggle").checked = (!getCookie("radDeg").includes("rad") || getCookie("radDeg").includes("degRad"));
   document.getElementById("circle_toggle").checked = (getCookie("image").includes("0"));
-  document.getElementById("coordinate_toggle").checked = (getCookie("coords").includes("0")); 
+  document.getElementById("coordinate_toggle").checked = (getCookie("coords").includes("0"));
 }
+
+init();
