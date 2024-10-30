@@ -270,3 +270,12 @@ function updateSettings() {
   setCookie('coords', document.getElementById("coordinate_toggle").checked ? "0" : "1");
   newQuestion();
 }
+
+function restoreSettings() {
+  console.log(document.cookie);
+  document.getElementById("full_circle_toggle").checked = (getCookie("fullCircle").includes("1"));
+  document.getElementById("radian_toggle").checked = (getCookie("radDeg").toLowerCase().includes("rad"));
+  document.getElementById("degree_toggle").checked = (!getCookie("radDeg").includes("rad") || getCookie("radDeg").includes("degRad"));
+  document.getElementById("circle_toggle").checked = (getCookie("image").includes("0"));
+  document.getElementById("coordinate_toggle").checked = (getCookie("coords").includes("0")); 
+}
