@@ -239,7 +239,7 @@ function updateStats() {
   if (getCookie("highscore") == "") { setCookie("highscore", "0"); }
   document.getElementById("highscore").innerText = Math.trunc(parseInt(getCookie("highscore")));
   document.getElementById("score").innerText = Math.trunc(score_);
-  document.getElementById("avgTime").innerText = Math.trunc(((time() - startTime_) / 1000) / correct_);
+  document.getElementById("avgTime").innerText = Math.trunc(((time() - startTime_) / 1000) / correct_ * 10) / 10;
   document.getElementById("highscore1").innerText = Math.trunc(parseInt(getCookie("highscore")));
   document.getElementById("score1").innerText = Math.trunc(score_);
   document.getElementById("avgTime1").innerText = Math.trunc(((time() - startTime_) / 1000) / answered_);
