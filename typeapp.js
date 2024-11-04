@@ -1,3 +1,4 @@
+const version_ = "v1.3.4"
 const sinArray_ = [
   ['0°', '0', '0'],
   ['30°', 'π/6', '1/2'],
@@ -53,6 +54,8 @@ function init() {
   viewLeaderboard_ = false;
   multiplier_ = 1;
 
+  document.getElementById("version").innerHTML = version_;
+
   cookieDialog();
   setupName();
   restoreSettings();
@@ -95,7 +98,7 @@ function refreshLeaderboard() {
 function pause() {
   document.getElementById("app").style.display = "none";
   document.getElementById("pause").style.display = "block";
-  pauseTime = time();
+  pauseTime_ = time();
 };
 
 function unpause() {
