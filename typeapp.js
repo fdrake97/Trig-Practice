@@ -95,6 +95,13 @@ function refreshLeaderboard() {
   }
 }
 
+function reformat() {
+  answer_ = (document.getElementById("answer").value.toLowerCase().trim());
+  answer_ = (answer_ + "").replace("r", "√ ̅").replace(/√(?! ̅)/g, '');
+  //answer_ = answer_.replace(/(\d+)(?=\/)/g, (match) => match.split('').map(digit => digit + '̅').join(''));
+  document.getElementById("answer").value = (answer_ + "");
+}
+
 function pause() {
   document.getElementById("app").style.display = "none";
   document.getElementById("pause").style.display = "block";
@@ -111,7 +118,6 @@ function unpause() {
 //usp=pp_url&entry.221510820=Name&entry.533647486=Format&entry.951457233=Result
 
 function submitScore() {
-  submitName();
   if (getCookie("submitted") != "True") {
     let id = "1FAIpQLSe5enqs4AS0p_S3E4bpqSIa1d5FH4WKwk3VBMYWlv9m7XTLXQ";
 
@@ -166,7 +172,7 @@ function submitName() {
   var name = document.getElementById("name").value.trim();
   if (name === "") { name = "Guest"; }
   setCookie("name", name);
-  document.getElementById("nameplate").innerHTML = "Your name: " + name;
+  document.getElementById("nameplate").innerHTML = "Your name: " + name; //I would remove this but somehow removing the "nameplate" element breaks everything.
 }
 
 function isAnswerOption(answer_) {
