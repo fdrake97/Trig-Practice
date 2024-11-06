@@ -19,7 +19,7 @@
   <app id="app" style="flex-basis:100%; justify-content: center;">
     <div id="question-box" style="flex: 1 1 100%">
       <div id="question">hmmm.. something seems to be wrong.</div>
-      <form onsubmit="event.preventDefault(); checkAnswer();">
+      <form onsubmit="event.preventDefault(); checkAnswer();" oninput="reformat()">
         <input type="text" id="answer" placeholder="Your answer" autocomplete="off" autofocus>
       </form>
       <div class='label' id="result"></div>
@@ -115,7 +115,7 @@
     </box>
     <box><label id="nameplate">Your name: OOPS</label></box>
     <box>
-      <form onsubmit="event.preventDefault(); submitName();">
+      <form onsubmit="event.preventDefault();" oninput="submitName()">
         <input type="text" id="name" placeholder="Your name" autocomplete="off">
       </form>
     </box>
