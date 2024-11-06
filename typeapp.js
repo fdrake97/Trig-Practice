@@ -1,4 +1,4 @@
-const version_ = "v1.3.4"
+const version_ = "v1.3.5"
 const sinArray_ = [
   ['0°', '0', '0'],
   ['30°', 'π/6', '1/2'],
@@ -53,6 +53,8 @@ function init() {
   viewSettings_ = false;
   viewLeaderboard_ = false;
   multiplier_ = 1;
+
+  document.getElementById("name").value = getCookie("name");
 
   document.getElementById("version").innerHTML = version_;
 
