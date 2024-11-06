@@ -2,19 +2,19 @@ const version_ = "v1.3.5"
 const sinArray_ = [
   ['0°', '0', '0'],
   ['30°', 'π/6', '1/2'],
-  ['45°', 'π/4', 'r2/2'],
-  ['60°', 'π/3', 'r3/2'],
+  ['45°', 'π/4', '√ ̅2/2'],
+  ['60°', 'π/3', '√ ̅3/2'],
   ['90°', 'π/2', '1'],
-  ['120°', '2π/3', 'r3/2'],
-  ['135°', '3π/4', 'r2/2'],
+  ['120°', '2π/3', '√ ̅3/2'],
+  ['135°', '3π/4', '√ ̅2/2'],
   ['150°', '5π/6', '1/2'],
   ['180°', 'π', '0'],
   ['210°', '7π/6', '-1/2'],
-  ['225°', '5π/4', '-r2/2'],
-  ['240°', '4π/3', '-r3/2'],
+  ['225°', '5π/4', '-√ ̅2/2'],
+  ['240°', '4π/3', '-√ ̅3/2'],
   ['270°', '3π/2', '-1'],
-  ['300°', '5π/3', '-r3/2'],
-  ['315°', '7π/4', '-r2/2'],
+  ['300°', '5π/3', '-√ ̅3/2'],
+  ['315°', '7π/4', '-√ ̅2/2'],
   ['330°', '11π/6', '-1/2'],
   ['360°', '2π', 'NAN']
 ];
@@ -82,6 +82,8 @@ function toggleSettings() {
 };
 
 function toggleLeaderboard() {
+  window.open("https://docs.google.com/spreadsheets/d/e/2PACX-1vRGaBPGLDT_jlGHDBRO7ijJ73KAwVwzQ2W38gxpBb4oKwvpUyw-nXN2K1EMM847G8ioyZ2jHirQgffQ/pubhtml?gid=2147011939&single=true", "_blank");
+  return;
   var x = document.getElementById("leaderboard");
   viewLeaderboard_ = !viewLeaderboard_;
   if (viewLeaderboard_) {
